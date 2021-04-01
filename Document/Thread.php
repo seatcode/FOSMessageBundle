@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Document;
 
 use FOS\MessageBundle\Model\ParticipantInterface;
@@ -31,7 +33,7 @@ abstract class Thread extends AbstractThread
      *
      * @var array of participant ID's
      */
-    protected $activeParticipants = array();
+    protected $activeParticipants = [];
 
     /**
      * The activeRecipients array will contain a participant's ID if the thread
@@ -40,7 +42,7 @@ abstract class Thread extends AbstractThread
      *
      * @var array of participant ID's
      */
-    protected $activeRecipients = array();
+    protected $activeRecipients = [];
 
     /**
      * The activeSenders array will contain a participant's ID if the thread is
@@ -49,7 +51,7 @@ abstract class Thread extends AbstractThread
      *
      * @var array of participant ID's
      */
-    protected $activeSenders = array();
+    protected $activeSenders = [];
 
     /**
      * Gets the users participating in this conversation.
@@ -64,10 +66,8 @@ abstract class Thread extends AbstractThread
     /**
      * Adds a participant to the thread
      * If it already exists, nothing is done.
-     *
-     * @param ParticipantInterface $participant
      */
-    public function addParticipant(ParticipantInterface $participant)
+    public function addParticipant(ParticipantInterface $participant): void
     {
         if (!$this->isParticipant($participant)) {
             $this->participants->add($participant);
@@ -76,8 +76,6 @@ abstract class Thread extends AbstractThread
 
     /**
      * Tells if the user participates to the conversation.
-     *
-     * @param ParticipantInterface $participant
      *
      * @return bool
      */
@@ -95,7 +93,7 @@ abstract class Thread extends AbstractThread
     /**
      * Performs denormalization tricks.
      */
-    public function denormalize()
+    public function denormalize(): void
     {
         $this->doCreatedByAndAt();
         $this->doLastMessageDate();
@@ -108,7 +106,7 @@ abstract class Thread extends AbstractThread
     /**
      * Ensures that the createdBy & createdAt properties are set.
      */
-    protected function doCreatedByAndAt()
+    protected function doCreatedByAndAt(): void
     {
         if (null !== $this->getCreatedBy()) {
             return;
@@ -125,7 +123,7 @@ abstract class Thread extends AbstractThread
     /**
      * Ensures that the lastMessageDate property is up to date.
      */
-    protected function doLastMessageDate()
+    protected function doLastMessageDate(): void
     {
         if (!$message = $this->getLastMessage()) {
             return;
@@ -137,7 +135,7 @@ abstract class Thread extends AbstractThread
     /**
      * Adds all messages contents to the keywords property.
      */
-    protected function doKeywords()
+    protected function doKeywords(): void
     {
         $keywords = $this->getSubject();
 
@@ -152,7 +150,7 @@ abstract class Thread extends AbstractThread
     /**
      * Denormalizes the value of isSpam to messages.
      */
-    protected function doSpam()
+    protected function doSpam(): void
     {
         foreach ($this->getMessages() as $message) {
             $message->setIsSpam($this->getIsSpam());
@@ -164,7 +162,7 @@ abstract class Thread extends AbstractThread
      *
      * Precondition: metadata exists for all thread participants
      */
-    protected function doMetadataLastMessageDates()
+    protected function doMetadataLastMessageDates(): void
     {
         foreach ($this->metadata as $meta) {
             foreach ($this->getMessages() as $message) {
@@ -184,11 +182,11 @@ abstract class Thread extends AbstractThread
     /**
      * Ensures that active participant, recipient and sender arrays are updated.
      */
-    protected function doEnsureActiveParticipantArrays()
+    protected function doEnsureActiveParticipantArrays(): void
     {
-        $this->activeParticipants = array();
-        $this->activeRecipients = array();
-        $this->activeSenders = array();
+        $this->activeParticipants = [];
+        $this->activeRecipients = [];
+        $this->activeSenders = [];
 
         foreach ($this->getParticipants() as $participant) {
             if ($this->isDeletedByParticipant($participant)) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Deleter;
 
 use FOS\MessageBundle\Event\FOSMessageEvents;
@@ -16,68 +18,44 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  *
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  */
-class Deleter implements DeleterInterface
+final class Deleter implements DeleterInterface
 {
-    /**
-     * The authorizer instance.
-     *
-     * @var AuthorizerInterface
-     */
-    protected $authorizer;
-
-    /**
-     * The participant provider instance.
-     *
-     * @var ParticipantProviderInterface
-     */
-    protected $participantProvider;
-
-    /**
-     * The event dispatcher.
-     *
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
-
-    public function __construct(AuthorizerInterface $authorizer, ParticipantProviderInterface $participantProvider, EventDispatcherInterface $dispatcher)
-    {
-        $this->authorizer = $authorizer;
-        $this->participantProvider = $participantProvider;
-        $this->dispatcher = $dispatcher;
+    public function __construct(
+        private AuthorizerInterface $authorizer,
+        private ParticipantProviderInterface $participantProvider,
+        private EventDispatcherInterface $dispatcher
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function markAsDeleted(ThreadInterface $thread)
+    public function markAsDeleted(ThreadInterface $thread): void
     {
         if (!$this->authorizer->canDeleteThread($thread)) {
             throw new AccessDeniedException('You are not allowed to delete this thread');
         }
+
         $thread->setIsDeletedByParticipant($this->getAuthenticatedParticipant(), true);
 
-        $this->dispatcher->dispatch(FOSMessageEvents::POST_DELETE, new ThreadEvent($thread));
+        $this->dispatcher->dispatch(new ThreadEvent($thread), FOSMessageEvents::POST_DELETE);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function markAsUndeleted(ThreadInterface $thread)
+    public function markAsUndeleted(ThreadInterface $thread): void
     {
         if (!$this->authorizer->canDeleteThread($thread)) {
             throw new AccessDeniedException('You are not allowed to delete this thread');
         }
+
         $thread->setIsDeletedByParticipant($this->getAuthenticatedParticipant(), false);
 
-        $this->dispatcher->dispatch(FOSMessageEvents::POST_UNDELETE, new ThreadEvent($thread));
+        $this->dispatcher->dispatch(new ThreadEvent($thread), FOSMessageEvents::POST_UNDELETE);
     }
 
-    /**
-     * Gets the current authenticated user.
-     *
-     * @return ParticipantInterface
-     */
-    protected function getAuthenticatedParticipant()
+    private function getAuthenticatedParticipant(): ParticipantInterface
     {
         return $this->participantProvider->getAuthenticatedParticipant();
     }

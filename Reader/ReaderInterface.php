@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Reader;
 
 use FOS\MessageBundle\Model\ReadableInterface;

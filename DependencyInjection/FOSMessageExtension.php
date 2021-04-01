@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Processor;
@@ -10,9 +12,9 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class FOSMessageExtension extends Extension
+final class FOSMessageExtension extends Extension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $processor = new Processor();
         $configuration = new Configuration();
@@ -21,7 +23,7 @@ class FOSMessageExtension extends Extension
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        if (!in_array(strtolower($config['db_driver']), array('orm', 'mongodb'))) {
+        if (!in_array(strtolower($config['db_driver']), ['orm', 'mongodb'], true)) {
             throw new \InvalidArgumentException(sprintf('Invalid db driver "%s".', $config['db_driver']));
         }
 

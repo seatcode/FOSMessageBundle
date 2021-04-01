@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\ModelManager;
 
 use FOS\MessageBundle\Model\MessageInterface;
@@ -18,8 +20,6 @@ interface MessageManagerInterface extends ReadableManagerInterface
     /**
      * Tells how many unread, non-spam, messages this participant has.
      *
-     * @param ParticipantInterface $participant
-     *
      * @return int the number of unread messages
      */
     public function getNbUnreadMessageByParticipant(ParticipantInterface $participant);
@@ -34,8 +34,7 @@ interface MessageManagerInterface extends ReadableManagerInterface
     /**
      * Saves a message.
      *
-     * @param MessageInterface $message
-     * @param bool             $andFlush Whether to flush the changes (default true)
+     * @param bool $andFlush Whether to flush the changes (default true)
      */
     public function saveMessage(MessageInterface $message, $andFlush = true);
 

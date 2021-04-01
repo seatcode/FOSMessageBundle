@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Twig\Extension;
 
 use FOS\MessageBundle\Model\ParticipantInterface;
@@ -8,13 +10,14 @@ use FOS\MessageBundle\Model\ThreadInterface;
 use FOS\MessageBundle\Provider\ProviderInterface;
 use FOS\MessageBundle\Security\AuthorizerInterface;
 use FOS\MessageBundle\Security\ParticipantProviderInterface;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class MessageExtension extends \Twig_Extension
+class MessageExtension extends AbstractExtension
 {
     protected $participantProvider;
     protected $provider;
     protected $authorizer;
-
     protected $nbUnreadMessagesCache;
 
     public function __construct(ParticipantProviderInterface $participantProvider, ProviderInterface $provider, AuthorizerInterface $authorizer)
@@ -29,12 +32,12 @@ class MessageExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('fos_message_is_read', array($this, 'isRead')),
-            new \Twig_SimpleFunction('fos_message_nb_unread', array($this, 'getNbUnread')),
-            new \Twig_SimpleFunction('fos_message_can_delete_thread', array($this, 'canDeleteThread')),
-            new \Twig_SimpleFunction('fos_message_deleted_by_participant', array($this, 'isThreadDeletedByParticipant')),
-        );
+        return [
+            new TwigFunction('fos_message_is_read', [$this, 'isRead']),
+            new TwigFunction('fos_message_nb_unread', [$this, 'getNbUnread']),
+            new TwigFunction('fos_message_can_delete_thread', [$this, 'canDeleteThread']),
+            new TwigFunction('fos_message_deleted_by_participant', [$this, 'isThreadDeletedByParticipant']),
+        ];
     }
 
     /**
@@ -50,8 +53,6 @@ class MessageExtension extends \Twig_Extension
     /**
      * Checks if the participant can mark a thread as deleted.
      *
-     * @param ThreadInterface $thread
-     *
      * @return bool true if participant can mark a thread as deleted, false otherwise
      */
     public function canDeleteThread(ThreadInterface $thread)
@@ -61,8 +62,6 @@ class MessageExtension extends \Twig_Extension
 
     /**
      * Checks if the participant has marked the thread as deleted.
-     *
-     * @param ThreadInterface $thread
      *
      * @return bool true if participant has marked the thread as deleted, false otherwise
      */
@@ -93,13 +92,5 @@ class MessageExtension extends \Twig_Extension
     protected function getAuthenticatedParticipant()
     {
         return $this->participantProvider->getAuthenticatedParticipant();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'fos_message';
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Search;
 
 /**
@@ -7,10 +9,5 @@ namespace FOS\MessageBundle\Search;
  */
 interface QueryFactoryInterface
 {
-    /**
-     * Gets the search term.
-     *
-     * @return Query the term object
-     */
-    public function createFromRequest();
+    public function createFromRequest(): Query;
 }

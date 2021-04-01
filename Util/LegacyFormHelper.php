@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Util;
 
 /**
@@ -11,7 +13,7 @@ namespace FOS\MessageBundle\Util;
  */
 final class LegacyFormHelper
 {
-    private static $map = array(
+    private static $map = [
         'FOS\UserBundle\Form\Type\UsernameFormType' => 'fos_user_username',
         'FOS\MessageBundle\FormType\RecipientsType' => 'recipients_selector',
         'Symfony\Component\Form\Extension\Core\Type\EmailType' => 'email',
@@ -19,7 +21,7 @@ final class LegacyFormHelper
         'Symfony\Component\Form\Extension\Core\Type\RepeatedType' => 'repeated',
         'Symfony\Component\Form\Extension\Core\Type\TextType' => 'text',
         'Symfony\Component\Form\Extension\Core\Type\TextareaType' => 'textarea',
-    );
+    ];
 
     public static function getType($class)
     {

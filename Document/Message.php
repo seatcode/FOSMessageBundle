@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Document;
 
 use FOS\MessageBundle\Model\Message as BaseMessage;
@@ -20,12 +22,12 @@ abstract class Message extends BaseMessage
      *
      * @var array of participant ID's
      */
-    protected $unreadForParticipants = array();
+    protected $unreadForParticipants = [];
 
     /**
      * @param bool $isSpam
      */
-    public function setIsSpam($isSpam)
+    public function setIsSpam($isSpam): void
     {
         $this->isSpam = (bool) $isSpam;
     }
@@ -39,7 +41,7 @@ abstract class Message extends BaseMessage
     /**
      * Performs denormalization tricks.
      */
-    public function denormalize()
+    public function denormalize(): void
     {
         $this->doSenderIsRead();
         $this->doEnsureUnreadForParticipantsArray();
@@ -48,7 +50,7 @@ abstract class Message extends BaseMessage
     /**
      * Ensures that the sender is considered to have read this message.
      */
-    protected function doSenderIsRead()
+    protected function doSenderIsRead(): void
     {
         $this->setIsReadByParticipant($this->getSender(), true);
     }
@@ -56,9 +58,9 @@ abstract class Message extends BaseMessage
     /**
      * Ensures that the unreadForParticipants array is updated.
      */
-    protected function doEnsureUnreadForParticipantsArray()
+    protected function doEnsureUnreadForParticipantsArray(): void
     {
-        $this->unreadForParticipants = array();
+        $this->unreadForParticipants = [];
 
         if ($this->isSpam) {
             return;

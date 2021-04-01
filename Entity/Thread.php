@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -86,7 +88,7 @@ abstract class Thread extends BaseThread
     /**
      * {@inheritdoc}
      */
-    public function addParticipant(ParticipantInterface $participant)
+    public function addParticipant(ParticipantInterface $participant): void
     {
         if (!$this->isParticipant($participant)) {
             $this->getParticipantsCollection()->add($participant);
@@ -136,7 +138,7 @@ abstract class Thread extends BaseThread
     /**
      * {@inheritdoc}
      */
-    public function addMetadata(ModelThreadMetadata $meta)
+    public function addMetadata(ModelThreadMetadata $meta): void
     {
         $meta->setThread($this);
         parent::addMetadata($meta);

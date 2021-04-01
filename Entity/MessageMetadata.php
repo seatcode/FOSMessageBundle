@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Entity;
 
 use FOS\MessageBundle\Model\MessageInterface;
@@ -26,7 +28,7 @@ abstract class MessageMetadata extends BaseMessageMetadata
         return $this->message;
     }
 
-    public function setMessage(MessageInterface $message)
+    public function setMessage(MessageInterface $message): void
     {
         $this->message = $message;
     }

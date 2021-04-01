@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Tests\Model;
 
 use FOS\MessageBundle\Model\ParticipantInterface;
@@ -7,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class ThreadTest extends TestCase
 {
-    public function testGetOtherParticipants()
+    public function testGetOtherParticipants(): void
     {
         $u1 = $this->createParticipantMock('u1');
         $u2 = $this->createParticipantMock('u2');
@@ -16,17 +18,17 @@ class ThreadTest extends TestCase
         $thread = $this->getMockForAbstractClass('FOS\MessageBundle\Model\Thread');
         $thread->expects($this->atLeastOnce())
             ->method('getParticipants')
-            ->will($this->returnValue(array($u1, $u2, $u3)));
+            ->will($this->returnValue([$u1, $u2, $u3]));
 
-        $toIds = function (array $participants) {
-            return array_map(function (ParticipantInterface $participant) {
+        $toIds = static function (array $participants) {
+            return array_map(static function (ParticipantInterface $participant) {
                 return $participant->getId();
             }, $participants);
         };
 
-        $this->assertSame($toIds(array($u2, $u3)), $toIds($thread->getOtherParticipants($u1)));
-        $this->assertSame($toIds(array($u1, $u3)), $toIds($thread->getOtherParticipants($u2)));
-        $this->assertSame($toIds(array($u1, $u2)), $toIds($thread->getOtherParticipants($u3)));
+        $this->assertSame($toIds([$u2, $u3]), $toIds($thread->getOtherParticipants($u1)));
+        $this->assertSame($toIds([$u1, $u3]), $toIds($thread->getOtherParticipants($u2)));
+        $this->assertSame($toIds([$u1, $u2]), $toIds($thread->getOtherParticipants($u3)));
     }
 
     protected function createParticipantMock($id)

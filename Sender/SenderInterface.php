@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Sender;
 
 use FOS\MessageBundle\Model\MessageInterface;

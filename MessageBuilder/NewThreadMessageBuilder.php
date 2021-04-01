@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\MessageBuilder;
 
 use Doctrine\Common\Collections\Collection;
@@ -27,8 +29,6 @@ class NewThreadMessageBuilder extends AbstractMessageBuilder
     }
 
     /**
-     * @param ParticipantInterface $recipient
-     *
      * @return NewThreadMessageBuilder (fluent interface)
      */
     public function addRecipient(ParticipantInterface $recipient)
@@ -39,8 +39,6 @@ class NewThreadMessageBuilder extends AbstractMessageBuilder
     }
 
     /**
-     * @param Collection $recipients
-     *
      * @return NewThreadMessageBuilder
      */
     public function addRecipients(Collection $recipients)

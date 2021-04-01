@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Model;
 
 abstract class MessageMetadata
@@ -15,7 +17,7 @@ abstract class MessageMetadata
         return $this->participant;
     }
 
-    public function setParticipant(ParticipantInterface $participant)
+    public function setParticipant(ParticipantInterface $participant): void
     {
         $this->participant = $participant;
     }
@@ -31,7 +33,7 @@ abstract class MessageMetadata
     /**
      * @param bool $isRead
      */
-    public function setIsRead($isRead)
+    public function setIsRead($isRead): void
     {
         $this->isRead = (bool) $isRead;
     }

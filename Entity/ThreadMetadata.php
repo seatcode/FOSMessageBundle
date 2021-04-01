@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Entity;
 
 use FOS\MessageBundle\Model\ThreadInterface;
@@ -28,7 +30,7 @@ abstract class ThreadMetadata extends BaseThreadMetadata
         return $this->thread;
     }
 
-    public function setThread(ThreadInterface $thread)
+    public function setThread(ThreadInterface $thread): void
     {
         $this->thread = $thread;
     }

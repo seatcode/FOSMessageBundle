@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\SpamDetection;
 
 use FOS\MessageBundle\FormModel\NewThreadMessage;
@@ -13,8 +15,6 @@ interface SpamDetectorInterface
 {
     /**
      * Tells whether or not a new message looks like spam.
-     *
-     * @param NewThreadMessage $message
      *
      * @return bool true if it is spam, false otherwise
      */

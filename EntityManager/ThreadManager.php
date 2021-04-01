@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\EntityManager;
 
 use Doctrine\ORM\EntityManager;
@@ -48,10 +50,8 @@ class ThreadManager extends BaseThreadManager
     protected $messageManager;
 
     /**
-     * @param EntityManager  $em
-     * @param string         $class
-     * @param string         $metaClass
-     * @param MessageManager $messageManager
+     * @param string $class
+     * @param string $metaClass
      */
     public function __construct(EntityManager $em, $class, $metaClass, MessageManager $messageManager)
     {
@@ -183,7 +183,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search)
+    public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search): void
     {
         // remove all non-word chars
         $search = preg_replace('/[^\w]/', ' ', trim($search));
@@ -237,7 +237,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function saveThread(ThreadInterface $thread, $andFlush = true)
+    public function saveThread(ThreadInterface $thread, $andFlush = true): void
     {
         $this->denormalize($thread);
         $this->em->persist($thread);
@@ -249,7 +249,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function deleteThread(ThreadInterface $thread)
+    public function deleteThread(ThreadInterface $thread): void
     {
         $this->em->remove($thread);
         $this->em->flush();
@@ -274,7 +274,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * Performs denormalization tricks.
      */
-    protected function denormalize(ThreadInterface $thread)
+    protected function denormalize(ThreadInterface $thread): void
     {
         $this->doMetadata($thread);
         $this->doCreatedByAndAt($thread);
@@ -284,7 +284,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * Ensures that the thread metadata are up to date.
      */
-    protected function doMetadata(ThreadInterface $thread)
+    protected function doMetadata(ThreadInterface $thread): void
     {
         // Participants
         foreach ($thread->getParticipants() as $participant) {
@@ -313,7 +313,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * Ensures that the createdBy & createdAt properties are set.
      */
-    protected function doCreatedByAndAt(ThreadInterface $thread)
+    protected function doCreatedByAndAt(ThreadInterface $thread): void
     {
         if (!($message = $thread->getFirstMessage())) {
             return;
@@ -331,14 +331,14 @@ class ThreadManager extends BaseThreadManager
     /**
      * Update the dates of last message written by other participants.
      */
-    protected function doDatesOfLastMessageWrittenByOtherParticipant(ThreadInterface $thread)
+    protected function doDatesOfLastMessageWrittenByOtherParticipant(ThreadInterface $thread): void
     {
         foreach ($thread->getAllMetadata() as $meta) {
             $participantId = $meta->getParticipant()->getId();
             $timestamp = 0;
 
             foreach ($thread->getMessages() as $message) {
-                if ($participantId != $message->getSender()->getId()) {
+                if ($participantId !== $message->getSender()->getId()) {
                     $timestamp = max($timestamp, $message->getTimestamp());
                 }
             }

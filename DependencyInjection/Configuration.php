@@ -1,7 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\DependencyInjection;
 
+use FOS\MessageBundle\FormModel\NewThreadMessage;
+use FOS\MessageBundle\FormModel\ReplyMessage;
+use FOS\MessageBundle\FormType\NewThreadMessageFormType;
+use FOS\MessageBundle\FormType\ReplyMessageFormType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -12,13 +18,11 @@ class Configuration implements ConfigurationInterface
 {
     /**
      * Generates the configuration tree.
-     *
-     * @return TreeBuilder
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('fos_message');
-        $rootNode = $treeBuilder->root('fos_message');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
@@ -50,20 +54,20 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('factory')->defaultValue('fos_message.new_thread_form.factory.default')->cannotBeEmpty()->end()
-                        ->scalarNode('type')->defaultValue('FOS\MessageBundle\FormType\NewThreadMessageFormType')->cannotBeEmpty()->end()
+                        ->scalarNode('type')->defaultValue(NewThreadMessageFormType::class)->cannotBeEmpty()->end()
                         ->scalarNode('handler')->defaultValue('fos_message.new_thread_form.handler.default')->cannotBeEmpty()->end()
                         ->scalarNode('name')->defaultValue('message')->cannotBeEmpty()->end()
-                        ->scalarNode('model')->defaultValue('FOS\MessageBundle\FormModel\NewThreadMessage')->end()
+                        ->scalarNode('model')->defaultValue(NewThreadMessage::class)->end()
                     ->end()
                 ->end()
                 ->arrayNode('reply_form')
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('factory')->defaultValue('fos_message.reply_form.factory.default')->cannotBeEmpty()->end()
-                        ->scalarNode('type')->defaultValue('FOS\MessageBundle\FormType\ReplyMessageFormType')->cannotBeEmpty()->end()
+                        ->scalarNode('type')->defaultValue(ReplyMessageFormType::class)->cannotBeEmpty()->end()
                         ->scalarNode('handler')->defaultValue('fos_message.reply_form.handler.default')->cannotBeEmpty()->end()
                         ->scalarNode('name')->defaultValue('message')->cannotBeEmpty()->end()
-                        ->scalarNode('model')->defaultValue('FOS\MessageBundle\FormModel\ReplyMessage')->end()
+                        ->scalarNode('model')->defaultValue(ReplyMessage::class)->end()
                     ->end()
                 ->end()
             ->end();

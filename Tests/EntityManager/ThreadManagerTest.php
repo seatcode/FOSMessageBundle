@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Tests\EntityManager;
 
 use FOS\MessageBundle\EntityManager\ThreadManager;
@@ -16,7 +18,7 @@ class ThreadManagerTest extends TestCase
     protected $user;
     protected $date;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->user = $this->createParticipantMock('4711');
         $this->date = new \DateTime('2013-12-25');
@@ -25,7 +27,7 @@ class ThreadManagerTest extends TestCase
     /**
      * Usual test case where neither createdBy or createdAt is set.
      */
-    public function testDoCreatedByAndAt()
+    public function testDoCreatedByAndAt(): void
     {
         $thread = $this->createThreadMock();
         $thread->expects($this->exactly(1))->method('getFirstMessage')
@@ -38,7 +40,7 @@ class ThreadManagerTest extends TestCase
     /**
      * Test where createdBy is set.
      */
-    public function testDoCreatedByAndAtWithCreatedBy()
+    public function testDoCreatedByAndAtWithCreatedBy(): void
     {
         $thread = $this->createThreadMock();
 
@@ -57,7 +59,7 @@ class ThreadManagerTest extends TestCase
     /**
      * Test where createdAt is set.
      */
-    public function testDoCreatedByAndAtWithCreatedAt()
+    public function testDoCreatedByAndAtWithCreatedAt(): void
     {
         $thread = $this->createThreadMock();
 
@@ -76,7 +78,7 @@ class ThreadManagerTest extends TestCase
     /**
      * Test where both craetedAt and createdBy is set.
      */
-    public function testDoCreatedByAndAtWithCreatedAtAndBy()
+    public function testDoCreatedByAndAtWithCreatedAtAndBy(): void
     {
         $thread = $this->createThreadMock();
         $thread->expects($this->exactly(0))->method('setCreatedBy');
@@ -97,7 +99,7 @@ class ThreadManagerTest extends TestCase
     /**
      * Test where thread do not have a message.
      */
-    public function testDoCreatedByAndNoMessage()
+    public function testDoCreatedByAndNoMessage(): void
     {
         $thread = $this->createThreadMock();
         $thread->expects($this->exactly(0))->method('setCreatedBy');
@@ -141,7 +143,7 @@ class ThreadManagerTest extends TestCase
      * @param int  $createdByCalls
      * @param int  $createdAtCalls
      */
-    protected function addThreadExpectations(&$thread, $createdByCalls = 1, $createdAtCalls = 1)
+    protected function addThreadExpectations(&$thread, $createdByCalls = 1, $createdAtCalls = 1): void
     {
         $thread->expects($this->exactly($createdByCalls))
             ->method('setCreatedBy')
@@ -196,11 +198,9 @@ class TestThreadManager extends ThreadManager
 
     /**
      * Make the function public.
-     *
-     * @param ThreadInterface $thread
      */
-    public function doCreatedByAndAt(ThreadInterface $thread)
+    public function doCreatedByAndAt(ThreadInterface $thread): void
     {
-        return parent::doCreatedByAndAt($thread);
+        parent::doCreatedByAndAt($thread);
     }
 }

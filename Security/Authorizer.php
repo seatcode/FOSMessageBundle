@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Security;
 
 use FOS\MessageBundle\Model\ParticipantInterface;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Search;
 
 /**
@@ -10,12 +12,12 @@ class Query
     /**
      * @var string
      */
-    protected $original = null;
+    protected $original;
 
     /**
      * @var string
      */
-    protected $escaped = null;
+    protected $escaped;
 
     /**
      * @param string $original
@@ -38,7 +40,7 @@ class Query
     /**
      * @param string $original
      */
-    public function setOriginal($original)
+    public function setOriginal($original): void
     {
         $this->original = $original;
     }
@@ -54,7 +56,7 @@ class Query
     /**
      * @param string $escaped
      */
-    public function setEscaped($escaped)
+    public function setEscaped($escaped): void
     {
         $this->escaped = $escaped;
     }

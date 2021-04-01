@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\DataTransformer;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,30 +18,23 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class RecipientsDataTransformer implements DataTransformerInterface
 {
-    /**
-     * @var DataTransformerInterface
-     */
-    private $userToUsernameTransformer;
-
-    public function __construct(DataTransformerInterface $userToUsernameTransformer)
-    {
-        $this->userToUsernameTransformer = $userToUsernameTransformer;
+    public function __construct(
+        private DataTransformerInterface $userToUsernameTransformer
+    ) {
     }
 
     /**
      * Transforms a collection of recipients into a string.
      *
      * @param Collection $recipients
-     *
-     * @return string
      */
-    public function transform($recipients)
+    public function transform($recipients): string
     {
         if (null === $recipients || 0 === $recipients->count()) {
             return '';
         }
 
-        $usernames = array();
+        $usernames = [];
 
         foreach ($recipients as $recipient) {
             $usernames[] = $this->userToUsernameTransformer->transform($recipient);
@@ -58,7 +53,7 @@ class RecipientsDataTransformer implements DataTransformerInterface
      *
      * @return Collection $recipients
      */
-    public function reverseTransform($usernames)
+    public function reverseTransform($usernames): ArrayCollection | Collection | null
     {
         if (null === $usernames || '' === $usernames) {
             return null;

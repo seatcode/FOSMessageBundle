@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;

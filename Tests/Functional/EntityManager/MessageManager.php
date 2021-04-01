@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Tests\Functional\EntityManager;
 
 use FOS\MessageBundle\Model\MessageInterface;
@@ -21,23 +23,23 @@ class MessageManager extends BaseMessageManager
         return 3;
     }
 
-    public function markAsReadByParticipant(ReadableInterface $readable, ParticipantInterface $participant)
+    public function markAsReadByParticipant(ReadableInterface $readable, ParticipantInterface $participant): void
     {
     }
 
-    public function markAsUnreadByParticipant(ReadableInterface $readable, ParticipantInterface $participant)
+    public function markAsUnreadByParticipant(ReadableInterface $readable, ParticipantInterface $participant): void
     {
     }
 
-    public function markIsReadByThreadAndParticipant(ThreadInterface $thread, ParticipantInterface $participant, $isRead)
+    public function markIsReadByThreadAndParticipant(ThreadInterface $thread, ParticipantInterface $participant, $isRead): void
     {
     }
 
-    protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, $isRead)
+    protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, $isRead): void
     {
     }
 
-    public function saveMessage(MessageInterface $message, $andFlush = true)
+    public function saveMessage(MessageInterface $message, $andFlush = true): void
     {
     }
 

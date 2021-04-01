@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Model;
 
 interface ReadableInterface
@@ -14,8 +16,7 @@ interface ReadableInterface
     /**
      * Sets whether or not this participant has read this.
      *
-     * @param ParticipantInterface $participant
-     * @param bool                 $isRead
+     * @param bool $isRead
      */
     public function setIsReadByParticipant(ParticipantInterface $participant, $isRead);
 }

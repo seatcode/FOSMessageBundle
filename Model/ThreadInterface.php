@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Model;
 
 use Doctrine\Common\Collections\Collection;
@@ -87,8 +89,6 @@ interface ThreadInterface extends ReadableInterface
     /**
      * Tells if the user participates to the conversation.
      *
-     * @param ParticipantInterface $participant
-     *
      * @return bool
      */
     public function isParticipant(ParticipantInterface $participant);
@@ -109,8 +109,7 @@ interface ThreadInterface extends ReadableInterface
     /**
      * Sets whether or not this participant has deleted this thread.
      *
-     * @param ParticipantInterface $participant
-     * @param bool                 $isDeleted
+     * @param bool $isDeleted
      */
     public function setIsDeletedByParticipant(ParticipantInterface $participant, $isDeleted);
 
@@ -123,8 +122,6 @@ interface ThreadInterface extends ReadableInterface
 
     /**
      * Get the participants this participant is talking with.
-     *
-     * @param ParticipantInterface $participant
      *
      * @return ParticipantInterface[]
      */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -82,7 +84,7 @@ abstract class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setThread(ThreadInterface $thread)
+    public function setThread(ThreadInterface $thread): void
     {
         $this->thread = $thread;
     }
@@ -106,7 +108,7 @@ abstract class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setBody($body)
+    public function setBody($body): void
     {
         $this->body = $body;
     }
@@ -122,7 +124,7 @@ abstract class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setSender(ParticipantInterface $sender)
+    public function setSender(ParticipantInterface $sender): void
     {
         $this->sender = $sender;
     }
@@ -139,10 +141,8 @@ abstract class Message implements MessageInterface
 
     /**
      * Adds MessageMetadata to the metadata collection.
-     *
-     * @param MessageMetadata $meta
      */
-    public function addMetadata(MessageMetadata $meta)
+    public function addMetadata(MessageMetadata $meta): void
     {
         $this->metadata->add($meta);
     }
@@ -150,14 +150,12 @@ abstract class Message implements MessageInterface
     /**
      * Get the MessageMetadata for a participant.
      *
-     * @param ParticipantInterface $participant
-     *
      * @return MessageMetadata
      */
     public function getMetadataForParticipant(ParticipantInterface $participant)
     {
         foreach ($this->metadata as $meta) {
-            if ($meta->getParticipant()->getId() == $participant->getId()) {
+            if ($meta->getParticipant()->getId() === $participant->getId()) {
                 return $meta;
             }
         }
@@ -180,7 +178,7 @@ abstract class Message implements MessageInterface
     /**
      * {@inheritdoc}
      */
-    public function setIsReadByParticipant(ParticipantInterface $participant, $isRead)
+    public function setIsReadByParticipant(ParticipantInterface $participant, $isRead): void
     {
         if (!$meta = $this->getMetadataForParticipant($participant)) {
             throw new \InvalidArgumentException(sprintf('No metadata exists for participant with id "%s"', $participant->getId()));

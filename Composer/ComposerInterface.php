@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Composer;
 
 use FOS\MessageBundle\MessageBuilder\AbstractMessageBuilder;
@@ -14,15 +16,11 @@ interface ComposerInterface
 {
     /**
      * Starts composing a message, starting a new thread.
-     *
-     * @return AbstractMessageBuilder
      */
-    public function newThread();
+    public function newThread(): AbstractMessageBuilder;
 
     /**
      * Starts composing a message in a reply to a thread.
-     *
-     * @return AbstractMessageBuilder
      */
-    public function reply(ThreadInterface $thread);
+    public function reply(ThreadInterface $thread): AbstractMessageBuilder;
 }

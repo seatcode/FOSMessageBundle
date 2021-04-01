@@ -1,9 +1,13 @@
 <?php
 
-namespace FOS\MessageBundle\Document;
+declare(strict_types=1);
+
+namespace Tests\Document;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use FOS\MessageBundle\Document\Message;
+use FOS\MessageBundle\Document\Thread;
 use FOS\MessageBundle\Model\MessageInterface;
 use FOS\MessageBundle\Model\ParticipantInterface;
 use PHPUnit\Framework\TestCase;
@@ -12,19 +16,19 @@ class ThreadDenormalizerTest extends TestCase
 {
     protected $dates;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestIncomplete('Broken, needs to be fixed');
 
-        $this->dates = array(
+        $this->dates = [
             new DateTime('- 3 days'),
             new DateTime('- 2 days'),
             new DateTime('- 1 days'),
             new DateTime('- 1 hour'),
-        );
+        ];
     }
 
-    public function testDenormalize()
+    public function testDenormalize(): void
     {
         $thread = new TestThread();
         $user1 = $this->createParticipantMock('u1');
@@ -38,9 +42,9 @@ class ThreadDenormalizerTest extends TestCase
         $thread->addParticipant($user2);
         $thread->addMessage($message);
 
-        $this->assertSame(array($user1, $user2), $thread->getParticipants());
-        $this->assertSame(array('u2' => $this->dates[0]->getTimestamp()), $thread->getDatesOfLastMessageWrittenByOtherParticipant());
-        $this->assertSame(array('u1' => $this->dates[0]->getTimestamp()), $thread->getDatesOfLastMessageWrittenByParticipant());
+        $this->assertSame([$user1, $user2], $thread->getParticipants());
+        $this->assertSame(['u2' => $this->dates[0]->getTimestamp()], $thread->getDatesOfLastMessageWrittenByOtherParticipant());
+        $this->assertSame(['u1' => $this->dates[0]->getTimestamp()], $thread->getDatesOfLastMessageWrittenByParticipant());
 
         /*
          * Second message
@@ -48,9 +52,9 @@ class ThreadDenormalizerTest extends TestCase
         $message = $this->createMessageMock($user2, $user1, $this->dates[1]);
         $thread->addMessage($message);
 
-        $this->assertSame(array($user1, $user2), $thread->getParticipants());
-        $this->assertSame(array('u1' => $this->dates[1]->getTimestamp(), 'u2' => $this->dates[0]->getTimestamp()), $thread->getDatesOfLastMessageWrittenByOtherParticipant());
-        $this->assertSame(array('u1' => $this->dates[0]->getTimestamp(), 'u2' => $this->dates[1]->getTimestamp()), $thread->getDatesOfLastMessageWrittenByParticipant());
+        $this->assertSame([$user1, $user2], $thread->getParticipants());
+        $this->assertSame(['u1' => $this->dates[1]->getTimestamp(), 'u2' => $this->dates[0]->getTimestamp()], $thread->getDatesOfLastMessageWrittenByOtherParticipant());
+        $this->assertSame(['u1' => $this->dates[0]->getTimestamp(), 'u2' => $this->dates[1]->getTimestamp()], $thread->getDatesOfLastMessageWrittenByParticipant());
 
         /*
          * Third message
@@ -58,9 +62,9 @@ class ThreadDenormalizerTest extends TestCase
         $message = $this->createMessageMock($user2, $user1, $this->dates[2]);
         $thread->addMessage($message);
 
-        $this->assertSame(array($user1, $user2), $thread->getParticipants());
-        $this->assertSame(array('u1' => $this->dates[2]->getTimestamp(), 'u2' => $this->dates[0]->getTimestamp()), $thread->getDatesOfLastMessageWrittenByOtherParticipant());
-        $this->assertSame(array('u1' => $this->dates[0]->getTimestamp(), 'u2' => $this->dates[2]->getTimestamp()), $thread->getDatesOfLastMessageWrittenByParticipant());
+        $this->assertSame([$user1, $user2], $thread->getParticipants());
+        $this->assertSame(['u1' => $this->dates[2]->getTimestamp(), 'u2' => $this->dates[0]->getTimestamp()], $thread->getDatesOfLastMessageWrittenByOtherParticipant());
+        $this->assertSame(['u1' => $this->dates[0]->getTimestamp(), 'u2' => $this->dates[2]->getTimestamp()], $thread->getDatesOfLastMessageWrittenByParticipant());
 
         /*
          * Fourth message
@@ -68,17 +72,17 @@ class ThreadDenormalizerTest extends TestCase
         $message = $this->createMessageMock($user1, $user2, $this->dates[3]);
         $thread->addMessage($message);
 
-        $this->assertSame(array($user1, $user2), $thread->getParticipants());
-        $this->assertSame(array('u1' => $this->dates[2]->getTimestamp(), 'u2' => $this->dates[3]->getTimestamp()), $thread->getDatesOfLastMessageWrittenByOtherParticipant());
-        $this->assertSame(array('u1' => $this->dates[3]->getTimestamp(), 'u2' => $this->dates[2]->getTimestamp()), $thread->getDatesOfLastMessageWrittenByParticipant());
+        $this->assertSame([$user1, $user2], $thread->getParticipants());
+        $this->assertSame(['u1' => $this->dates[2]->getTimestamp(), 'u2' => $this->dates[3]->getTimestamp()], $thread->getDatesOfLastMessageWrittenByOtherParticipant());
+        $this->assertSame(['u1' => $this->dates[3]->getTimestamp(), 'u2' => $this->dates[2]->getTimestamp()], $thread->getDatesOfLastMessageWrittenByParticipant());
 
         $this->assertEquals('test thread subject hi dude', $thread->getKeywords());
-        $this->assertSame(array('u1' => false, 'u2' => false), $thread->getIsDeletedByParticipant());
+        $this->assertSame(['u1' => false, 'u2' => false], $thread->getIsDeletedByParticipant());
     }
 
     protected function createMessageMock($sender, $recipient, DateTime $date)
     {
-        $message = $this->getMockBuilder('FOS\MessageBundle\Document\Message')
+        $message = $this->getMockBuilder(Message::class)
             ->getMock();
 
         $message->expects($this->atLeastOnce())
@@ -98,7 +102,7 @@ class ThreadDenormalizerTest extends TestCase
 
     protected function createParticipantMock($id)
     {
-        $user = $this->getMockBuilder('FOS\MessageBundle\Model\ParticipantInterface')
+        $user = $this->getMockBuilder(ParticipantInterface::class)
             ->disableOriginalConstructor(true)
             ->getMock();
 
@@ -132,7 +136,7 @@ class TestThread extends Thread
         return $this->isDeletedByParticipant;
     }
 
-    public function addMessage(MessageInterface $message)
+    public function addMessage(MessageInterface $message): void
     {
         parent::addMessage($message);
 
@@ -142,13 +146,13 @@ class TestThread extends Thread
     /**
      * Sort denormalized properties to ease testing.
      */
-    protected function sortDenormalizedProperties()
+    protected function sortDenormalizedProperties(): void
     {
         ksort($this->isDeletedByParticipant);
         ksort($this->datesOfLastMessageWrittenByParticipant);
         ksort($this->datesOfLastMessageWrittenByOtherParticipant);
         $participants = $this->participants->toArray();
-        usort($participants, function (ParticipantInterface $p1, ParticipantInterface $p2) {
+        usort($participants, static function (ParticipantInterface $p1, ParticipantInterface $p2) {
             return $p1->getId() > $p2->getId();
         });
         $this->participants = new ArrayCollection($participants);

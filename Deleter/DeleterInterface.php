@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Deleter;
 
 use FOS\MessageBundle\Model\ThreadInterface;
@@ -14,10 +16,10 @@ interface DeleterInterface
     /**
      * Marks the thread as deleted by the current authenticated user.
      */
-    public function markAsDeleted(ThreadInterface $thread);
+    public function markAsDeleted(ThreadInterface $thread): void;
 
     /**
      * Marks the thread as undeleted by the current authenticated user.
      */
-    public function markAsUndeleted(ThreadInterface $thread);
+    public function markAsUndeleted(ThreadInterface $thread): void;
 }

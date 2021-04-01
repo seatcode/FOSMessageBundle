@@ -1,7 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Tests\Twig\Extension;
 
+use FOS\MessageBundle\Model\ParticipantInterface;
+use FOS\MessageBundle\Model\ReadableInterface;
+use FOS\MessageBundle\Model\ThreadInterface;
+use FOS\MessageBundle\Provider\ProviderInterface;
+use FOS\MessageBundle\Security\AuthorizerInterface;
+use FOS\MessageBundle\Security\ParticipantProviderInterface;
 use FOS\MessageBundle\Twig\Extension\MessageExtension;
 use PHPUnit\Framework\TestCase;
 
@@ -16,46 +24,46 @@ class MessageExtensionTest extends TestCase
     private $authorizer;
     private $participant;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->participantProvider = $this->getMockBuilder('FOS\MessageBundle\Security\ParticipantProviderInterface')->getMock();
-        $this->provider = $this->getMockBuilder('FOS\MessageBundle\Provider\ProviderInterface')->getMock();
-        $this->authorizer = $this->getMockBuilder('FOS\MessageBundle\Security\AuthorizerInterface')->getMock();
-        $this->participant = $this->getMockBuilder('FOS\MessageBundle\Model\ParticipantInterface')->getMock();
+        $this->participantProvider = $this->getMockBuilder(ParticipantProviderInterface::class)->getMock();
+        $this->provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
+        $this->authorizer = $this->getMockBuilder(AuthorizerInterface::class)->getMock();
+        $this->participant = $this->getMockBuilder(ParticipantInterface::class)->getMock();
         $this->extension = new MessageExtension($this->participantProvider, $this->provider, $this->authorizer);
     }
 
-    public function testIsReadReturnsTrueWhenRead()
+    public function testIsReadReturnsTrueWhenRead(): void
     {
         $this->participantProvider->expects($this->once())->method('getAuthenticatedParticipant')->will($this->returnValue($this->participant));
-        $readAble = $this->getMockBuilder('FOS\MessageBundle\Model\ReadableInterface')->getMock();
+        $readAble = $this->getMockBuilder(ReadableInterface::class)->getMock();
         $readAble->expects($this->once())->method('isReadByParticipant')->with($this->participant)->will($this->returnValue(true));
         $this->assertTrue($this->extension->isRead($readAble));
     }
 
-    public function testIsReadReturnsFalseWhenNotRead()
+    public function testIsReadReturnsFalseWhenNotRead(): void
     {
         $this->participantProvider->expects($this->once())->method('getAuthenticatedParticipant')->will($this->returnValue($this->participant));
-        $readAble = $this->getMockBuilder('FOS\MessageBundle\Model\ReadableInterface')->getMock();
+        $readAble = $this->getMockBuilder(ReadableInterface::class)->getMock();
         $readAble->expects($this->once())->method('isReadByParticipant')->with($this->participant)->will($this->returnValue(false));
         $this->assertFalse($this->extension->isRead($readAble));
     }
 
-    public function testCanDeleteThreadWhenHasPermission()
+    public function testCanDeleteThreadWhenHasPermission(): void
     {
         $thread = $this->getThreadMock();
         $this->authorizer->expects($this->once())->method('canDeleteThread')->with($thread)->will($this->returnValue(true));
         $this->assertTrue($this->extension->canDeleteThread($thread));
     }
 
-    public function testCanDeleteThreadWhenNoPermission()
+    public function testCanDeleteThreadWhenNoPermission(): void
     {
         $thread = $this->getThreadMock();
         $this->authorizer->expects($this->once())->method('canDeleteThread')->with($thread)->will($this->returnValue(false));
         $this->assertFalse($this->extension->canDeleteThread($thread));
     }
 
-    public function testIsThreadDeletedByParticipantWhenDeleted()
+    public function testIsThreadDeletedByParticipantWhenDeleted(): void
     {
         $thread = $this->getThreadMock();
         $this->participantProvider->expects($this->once())->method('getAuthenticatedParticipant')->will($this->returnValue($this->participant));
@@ -63,20 +71,13 @@ class MessageExtensionTest extends TestCase
         $this->assertTrue($this->extension->isThreadDeletedByParticipant($thread));
     }
 
-    public function testGetNbUnreadCacheStartsEmpty()
+    public function testGetNbUnread(): void
     {
-        $this->assertAttributeEmpty('nbUnreadMessagesCache', $this->extension);
-        $this->extension->getNbUnread();
-    }
-
-    public function testGetNbUnread()
-    {
-        $this->assertAttributeEmpty('nbUnreadMessagesCache', $this->extension);
         $this->provider->expects($this->once())->method('getNbUnreadMessages')->will($this->returnValue(3));
         $this->assertEquals(3, $this->extension->getNbUnread());
     }
 
-    public function testGetNbUnreadStoresCache()
+    public function testGetNbUnreadStoresCache(): void
     {
         $this->provider->expects($this->once())->method('getNbUnreadMessages')->will($this->returnValue(3));
         //we call it twice but expect to only get one call
@@ -84,13 +85,8 @@ class MessageExtensionTest extends TestCase
         $this->extension->getNbUnread();
     }
 
-    public function testGetName()
-    {
-        $this->assertEquals('fos_message', $this->extension->getName());
-    }
-
     protected function getThreadMock()
     {
-        return $this->getMockBuilder('FOS\MessageBundle\Model\ThreadInterface')->getMock();
+        return $this->getMockBuilder(ThreadInterface::class)->getMock();
     }
 }

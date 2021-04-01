@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\FormType;
 
 use FOS\MessageBundle\Util\LegacyFormHelper;
@@ -15,20 +17,20 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class ReplyMessageFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('body', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\TextareaType'), array(
+            ->add('body', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\TextareaType'), [
                 'label' => 'body',
                 'translation_domain' => 'FOSMessageBundle',
-            ));
+            ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'intention' => 'reply',
-        ));
+        ]);
     }
 
     /**
@@ -42,7 +44,7 @@ class ReplyMessageFormType extends AbstractType
     /**
      * @deprecated To remove when supporting only Symfony 3
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function setDefaultOptions(OptionsResolverInterface $resolver): void
     {
         $this->configureOptions($resolver);
     }

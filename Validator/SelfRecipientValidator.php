@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Validator;
 
 use FOS\MessageBundle\Security\ParticipantProviderInterface;
@@ -21,10 +23,9 @@ class SelfRecipientValidator extends ConstraintValidator
     /**
      * Indicates whether the constraint is valid.
      *
-     * @param object     $recipient
-     * @param Constraint $constraint
+     * @param object $recipient
      */
-    public function validate($recipient, Constraint $constraint)
+    public function validate($recipient, Constraint $constraint): void
     {
         if ($recipient === $this->participantProvider->getAuthenticatedParticipant()) {
             $this->context->addViolation($constraint->message);

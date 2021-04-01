@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Sender;
 
 use FOS\MessageBundle\Event\FOSMessageEvents;
@@ -41,7 +43,7 @@ class Sender implements SenderInterface
     /**
      * {@inheritdoc}
      */
-    public function send(MessageInterface $message)
+    public function send(MessageInterface $message): void
     {
         $this->threadManager->saveThread($message->getThread(), false);
         $this->messageManager->saveMessage($message, false);

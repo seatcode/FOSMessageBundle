@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
@@ -21,7 +23,7 @@ abstract class Message extends BaseMessage
     /**
      * {@inheritdoc}
      */
-    public function addMetadata(ModelMessageMetadata $meta)
+    public function addMetadata(ModelMessageMetadata $meta): void
     {
         $meta->setMessage($this);
         parent::addMetadata($meta);

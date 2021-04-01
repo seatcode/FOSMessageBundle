@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Event;
 
 use FOS\MessageBundle\Model\ReadableInterface;

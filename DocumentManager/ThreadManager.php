@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\DocumentManager;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
@@ -47,10 +49,8 @@ class ThreadManager extends BaseThreadManager
     /**
      * Constructor.
      *
-     * @param DocumentManager $dm
-     * @param string          $class
-     * @param string          $metaClass
-     * @param MessageManager  $messageManager
+     * @param string $class
+     * @param string $metaClass
      */
     public function __construct(DocumentManager $dm, $class, $metaClass, MessageManager $messageManager)
     {
@@ -191,7 +191,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function saveThread(ThreadInterface $thread, $andFlush = true)
+    public function saveThread(ThreadInterface $thread, $andFlush = true): void
     {
         $this->denormalize($thread);
         $this->dm->persist($thread);
@@ -203,7 +203,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function deleteThread(ThreadInterface $thread)
+    public function deleteThread(ThreadInterface $thread): void
     {
         $this->dm->remove($thread);
         $this->dm->flush();
@@ -237,10 +237,8 @@ class ThreadManager extends BaseThreadManager
 
     /**
      * Performs denormalization tricks.
-     *
-     * @param Thread $thread
      */
-    protected function denormalize(Thread $thread)
+    protected function denormalize(Thread $thread): void
     {
         $this->doParticipants($thread);
         $this->doEnsureThreadMetadataExists($thread);
@@ -254,7 +252,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * Ensures that the thread participants are up to date.
      */
-    protected function doParticipants(Thread $thread)
+    protected function doParticipants(Thread $thread): void
     {
         foreach ($thread->getMessages() as $message) {
             $thread->addParticipant($message->getSender());
@@ -264,10 +262,8 @@ class ThreadManager extends BaseThreadManager
     /**
      * Ensures that metadata exists for each thread participant and that the
      * last message dates are current.
-     *
-     * @param Thread $thread
      */
-    protected function doEnsureThreadMetadataExists(Thread $thread)
+    protected function doEnsureThreadMetadataExists(Thread $thread): void
     {
         foreach ($thread->getParticipants() as $participant) {
             if (!$meta = $thread->getMetadataForParticipant($participant)) {

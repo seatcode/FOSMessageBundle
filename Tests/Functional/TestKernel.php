@@ -1,50 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Tests\Functional;
 
 use FOS\MessageBundle\FOSMessageBundle;
 use FOS\MessageBundle\Tests\Functional\Entity\Message;
 use FOS\MessageBundle\Tests\Functional\Entity\Thread;
+use FOS\MessageBundle\Tests\Functional\Entity\User;
 use FOS\MessageBundle\Tests\Functional\Entity\UserProvider;
 use FOS\MessageBundle\Tests\Functional\EntityManager\MessageManager;
 use FOS\MessageBundle\Tests\Functional\EntityManager\ThreadManager;
 use FOS\MessageBundle\Tests\Functional\Form\UserToUsernameTransformer;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
-use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Routing\RouteCollectionBuilder;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 /**
  * @author Guilhem N. <guilhem.niot@gmail.com>
  */
-class TestKernel extends Kernel
+final class TestKernel extends Kernel
 {
     use MicroKernelTrait;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function registerBundles()
+    /** {@inheritdoc} */
+    #[Pure]
+    public function registerBundles(): iterable
     {
-        $bundles = array(
+        return [
             new FrameworkBundle(),
             new SecurityBundle(),
             new TwigBundle(),
             new FOSMessageBundle(),
-        );
-
-        return $bundles;
+            new MyTestBundle(),
+        ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configureRoutes(RouteCollectionBuilder $routes)
+    /** {@inheritdoc} */
+    protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->import('@FOSMessageBundle/Resources/config/routing.xml');
     }
@@ -52,41 +53,49 @@ class TestKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
+    protected function configureContainer(ContainerConfigurator $container): void
     {
-        $c->loadFromExtension('framework', array(
+        $container->extension('framework', [
             'secret' => 'MySecretKey',
             'test' => null,
             'form' => null,
-            'templating' => array(
-                'engines' => array('twig'),
-            ),
-        ));
+            'router' => [
+                'utf8' => true,
+            ],
+        ]);
 
-        $c->loadFromExtension('security', array(
-            'providers' => array('permissive' => array('id' => 'app.user_provider')),
-            'encoders' => array('FOS\MessageBundle\Tests\Functional\Entity\User' => 'plaintext'),
-            'firewalls' => array('main' => array('http_basic' => true)),
-        ));
+        $container->extension('security', [
+            'providers' => ['permissive' => ['id' => 'app.user_provider']],
+            'encoders' => [User::class => 'plaintext'],
+            'firewalls' => ['main' => ['http_basic' => true]],
+        ]);
 
-        $c->loadFromExtension('twig', array(
+        $container->extension('twig', [
             'strict_variables' => '%kernel.debug%',
-        ));
+        ]);
 
-        $c->loadFromExtension('fos_message', array(
+        $container->extension('fos_message', [
             'db_driver' => 'orm',
             'thread_class' => Thread::class,
             'message_class' => Message::class,
-        ));
+        ]);
 
-        $c->register('fos_user.user_to_username_transformer', UserToUsernameTransformer::class);
-        $c->register('app.user_provider', UserProvider::class);
-        $c->addCompilerPass(new RegisteringManagersPass());
+        $container->services()->set('fos_user.user_to_username_transformer', UserToUsernameTransformer::class);
+        $container->services()->set('app.user_provider', UserProvider::class);
     }
 }
 
-class RegisteringManagersPass implements CompilerPassInterface {
-    public function process(ContainerBuilder $container)
+final class MyTestBundle extends Bundle
+{
+    public function build(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new RegisteringManagersPass());
+    }
+}
+
+final class RegisteringManagersPass implements CompilerPassInterface
+{
+    public function process(ContainerBuilder $container): void
     {
         $container->register('fos_message.message_manager.default', MessageManager::class);
         $container->register('fos_message.thread_manager.default', ThreadManager::class);

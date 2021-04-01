@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Model;
 
 abstract class ThreadMetadata
@@ -29,7 +31,7 @@ abstract class ThreadMetadata
         return $this->participant;
     }
 
-    public function setParticipant(ParticipantInterface $participant)
+    public function setParticipant(ParticipantInterface $participant): void
     {
         $this->participant = $participant;
     }
@@ -45,7 +47,7 @@ abstract class ThreadMetadata
     /**
      * @param bool $isDeleted
      */
-    public function setIsDeleted($isDeleted)
+    public function setIsDeleted($isDeleted): void
     {
         $this->isDeleted = (bool) $isDeleted;
     }
@@ -58,7 +60,7 @@ abstract class ThreadMetadata
         return $this->lastParticipantMessageDate;
     }
 
-    public function setLastParticipantMessageDate(\DateTime $date)
+    public function setLastParticipantMessageDate(\DateTime $date): void
     {
         $this->lastParticipantMessageDate = $date;
     }
@@ -71,7 +73,7 @@ abstract class ThreadMetadata
         return $this->lastMessageDate;
     }
 
-    public function setLastMessageDate(\DateTime $date)
+    public function setLastMessageDate(\DateTime $date): void
     {
         $this->lastMessageDate = $date;
     }

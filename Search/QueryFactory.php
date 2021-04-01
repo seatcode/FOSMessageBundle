@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Search;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -8,33 +10,15 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Gets the search term from the request and prepares it.
  */
-class QueryFactory implements QueryFactoryInterface
+final class QueryFactory implements QueryFactoryInterface
 {
-    protected $request;
-
-    /**
-     * The query parameter containing the search term.
-     *
-     * @var string
-     */
-    protected $queryParameter;
-
-    /**
-     * Instanciates a new TermGetter.
-     *
-     * @param RequestStack|Request $requestStack
-     * @param string               $queryParameter
-     */
-    public function __construct($requestStack, $queryParameter)
-    {
-        $this->request = $requestStack;
-        $this->queryParameter = $queryParameter;
+    public function __construct(
+        protected RequestStack $requestStack,
+        protected string $queryParameter
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function createFromRequest()
+    public function createFromRequest(): Query
     {
         $original = $this->getCurrentRequest()->query->get($this->queryParameter);
         $original = trim($original);
@@ -46,30 +30,19 @@ class QueryFactory implements QueryFactoryInterface
 
     /**
      * Sets: the query parameter containing the search term.
-     *
-     * @param string $queryParameter
      */
-    public function setQueryParameter($queryParameter)
+    public function setQueryParameter(string $queryParameter): void
     {
         $this->queryParameter = $queryParameter;
     }
 
-    protected function escapeTerm($term)
+    private function escapeTerm($term)
     {
         return $term;
     }
 
-    /**
-     * BC layer to retrieve the current request directly or from a stack.
-     *
-     * @return null|Request
-     */
-    private function getCurrentRequest()
+    private function getCurrentRequest(): ?Request
     {
-        if ($this->request instanceof Request) {
-            return $this->request;
-        }
-
-        return $this->request->getCurrentRequest();
+        return $this->requestStack->getCurrentRequest();
     }
 }

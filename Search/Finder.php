@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Search;
 
 use FOS\MessageBundle\Model\ParticipantInterface;

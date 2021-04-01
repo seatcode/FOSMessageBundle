@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Tests\Functional\Form;
 
 use FOS\MessageBundle\Tests\Functional\Entity\User;

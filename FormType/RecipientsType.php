@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\FormType;
 
 use FOS\MessageBundle\DataTransformer\RecipientsDataTransformer;
@@ -21,9 +23,6 @@ class RecipientsType extends AbstractType
      */
     private $recipientsTransformer;
 
-    /**
-     * @param RecipientsDataTransformer $transformer
-     */
     public function __construct(RecipientsDataTransformer $transformer)
     {
         $this->recipientsTransformer = $transformer;
@@ -32,7 +31,7 @@ class RecipientsType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addModelTransformer($this->recipientsTransformer);
     }
@@ -40,14 +39,14 @@ class RecipientsType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'invalid_message' => 'The selected recipient does not exist',
-        ));
+        ]);
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function setDefaultOptions(OptionsResolverInterface $resolver): void
     {
         $this->configureOptions($resolver);
     }

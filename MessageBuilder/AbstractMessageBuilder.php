@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\MessageBuilder;
 
 use FOS\MessageBundle\Model\MessageInterface;
@@ -59,8 +61,6 @@ abstract class AbstractMessageBuilder
     }
 
     /**
-     * @param ParticipantInterface $sender
-     *
      * @return AbstractMessageBuilder (fluent interface)
      */
     public function setSender(ParticipantInterface $sender)

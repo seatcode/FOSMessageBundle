@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="FOS\MessageBundle\Controller\MessageController" public="true" autoconfigure="true">
+            <argument key="$replyMessageFormFactory" type="service" id="fos_message.reply_form.factory" />
+            <argument key="$replyMessageFormHandler" type="service" id="fos_message.reply_form.handler" />
+            <argument key="$newThreadMessageFormFactory" type="service" id="fos_message.new_thread_form.factory" />
+            <argument key="$newThreadMessageFormHandler" type="service" id="fos_message.new_thread_form.handler" />
+            <argument key="$deleter" type="service" id="fos_message.deleter" />
+            <argument key="$threadManager" type="service" id="fos_message.thread_manager" />
+            <argument key="$queryFactory" type="service" id="fos_message.search_query_factory" />
+            <argument key="$finder" type="service" id="fos_message.search_finder" />
+            <argument key="$provider" type="service" id="fos_message.provider" />
 
-        <service id="FOS\MessageBundle\Controller\MessageController" public="true">
-            <bind key="$container"
-                type="service"
-                id="service_container"
-            />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
 
         <service id="fos_message.sender.default" class="FOS\MessageBundle\Sender\Sender" public="false">

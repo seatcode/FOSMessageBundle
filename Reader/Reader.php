@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Reader;
 
 use FOS\MessageBundle\Event\FOSMessageEvents;
@@ -48,7 +50,7 @@ class Reader implements ReaderInterface
     /**
      * {@inheritdoc}
      */
-    public function markAsRead(ReadableInterface $readable)
+    public function markAsRead(ReadableInterface $readable): void
     {
         $participant = $this->getAuthenticatedParticipant();
         if ($readable->isReadByParticipant($participant)) {
@@ -62,7 +64,7 @@ class Reader implements ReaderInterface
     /**
      * {@inheritdoc}
      */
-    public function markAsUnread(ReadableInterface $readable)
+    public function markAsUnread(ReadableInterface $readable): void
     {
         $participant = $this->getAuthenticatedParticipant();
         if (!$readable->isReadByParticipant($participant)) {

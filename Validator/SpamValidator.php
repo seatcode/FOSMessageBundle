@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Validator;
 
 use FOS\MessageBundle\SpamDetection\SpamDetectorInterface;
@@ -21,10 +23,9 @@ class SpamValidator extends ConstraintValidator
     /**
      * Indicates whether the constraint is valid.
      *
-     * @param object     $value
-     * @param Constraint $constraint
+     * @param object $value
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if ($this->spamDetector->isSpam($value)) {
             $this->context->addViolation($constraint->message);

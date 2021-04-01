@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Tests\Functional\EntityManager;
 
 use FOS\MessageBundle\Model\ParticipantInterface;
@@ -15,60 +17,60 @@ class ThreadManager extends BaseThreadManager
         return new Thread();
     }
 
-    public function getParticipantInboxThreadsQueryBuilder(ParticipantInterface $participant)
+    public function getParticipantInboxThreadsQueryBuilder(ParticipantInterface $participant): void
     {
     }
 
     public function findParticipantInboxThreads(ParticipantInterface $participant)
     {
-        return array(new Thread());
+        return [new Thread()];
     }
 
-    public function getParticipantSentThreadsQueryBuilder(ParticipantInterface $participant)
+    public function getParticipantSentThreadsQueryBuilder(ParticipantInterface $participant): void
     {
     }
 
     public function findParticipantSentThreads(ParticipantInterface $participant)
     {
-        return array();
+        return [];
     }
 
-    public function getParticipantDeletedThreadsQueryBuilder(ParticipantInterface $participant)
+    public function getParticipantDeletedThreadsQueryBuilder(ParticipantInterface $participant): void
     {
     }
 
     public function findParticipantDeletedThreads(ParticipantInterface $participant)
     {
-        return array();
+        return [];
     }
 
-    public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search)
+    public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search): void
     {
     }
 
     public function findParticipantThreadsBySearch(ParticipantInterface $participant, $search)
     {
-        return array();
+        return [];
     }
 
     public function findThreadsCreatedBy(ParticipantInterface $participant)
     {
-        return array();
+        return [];
     }
 
-    public function markAsReadByParticipant(ReadableInterface $readable, ParticipantInterface $participant)
+    public function markAsReadByParticipant(ReadableInterface $readable, ParticipantInterface $participant): void
     {
     }
 
-    public function markAsUnreadByParticipant(ReadableInterface $readable, ParticipantInterface $participant)
+    public function markAsUnreadByParticipant(ReadableInterface $readable, ParticipantInterface $participant): void
     {
     }
 
-    public function saveThread(ThreadInterface $thread, $andFlush = true)
+    public function saveThread(ThreadInterface $thread, $andFlush = true): void
     {
     }
 
-    public function deleteThread(ThreadInterface $thread)
+    public function deleteThread(ThreadInterface $thread): void
     {
     }
 

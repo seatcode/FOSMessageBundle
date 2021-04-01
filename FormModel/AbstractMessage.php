@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\FormModel;
 
 abstract class AbstractMessage
@@ -20,7 +22,7 @@ abstract class AbstractMessage
     /**
      * @param string
      */
-    public function setBody($body)
+    public function setBody($body): void
     {
         $this->body = $body;
     }

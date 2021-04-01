@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\SpamDetection;
 
 use FOS\MessageBundle\FormModel\NewThreadMessage;
@@ -29,9 +31,9 @@ class AkismetSpamDetector implements SpamDetectorInterface
      */
     public function isSpam(NewThreadMessage $message)
     {
-        return $this->akismet->isSpam(array(
+        return $this->akismet->isSpam([
             'comment_author' => (string) $this->participantProvider->getAuthenticatedParticipant(),
             'comment_content' => $message->getBody(),
-        ));
+        ]);
     }
 }

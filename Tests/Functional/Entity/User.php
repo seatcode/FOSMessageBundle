@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FOS\MessageBundle\Tests\Functional\Entity;
 
 use FOS\MessageBundle\Model\ParticipantInterface;
@@ -17,16 +19,16 @@ class User implements ParticipantInterface, UserInterface
         return 'pass';
     }
 
-    public function getSalt()
+    public function getSalt(): void
     {
     }
 
     public function getRoles()
     {
-        return array();
+        return [];
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
