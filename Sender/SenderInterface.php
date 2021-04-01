@@ -13,8 +13,5 @@ use FOS\MessageBundle\Model\MessageInterface;
  */
 interface SenderInterface
 {
-    /**
-     * Sends the given message.
-     */
-    public function send(MessageInterface $message);
+    public function send(MessageInterface $message): void;
 }

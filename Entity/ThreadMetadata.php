@@ -9,15 +9,15 @@ use FOS\MessageBundle\Model\ThreadMetadata as BaseThreadMetadata;
 
 abstract class ThreadMetadata extends BaseThreadMetadata
 {
-    protected $id;
-    protected $thread;
+    protected int $id;
+    protected ThreadInterface $thread;
 
     /**
      * Gets the thread map id.
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -25,7 +25,7 @@ abstract class ThreadMetadata extends BaseThreadMetadata
     /**
      * @return ThreadInterface
      */
-    public function getThread()
+    public function getThread(): ThreadInterface
     {
         return $this->thread;
     }

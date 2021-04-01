@@ -6,23 +6,14 @@ namespace FOS\MessageBundle\FormModel;
 
 abstract class AbstractMessage
 {
-    /**
-     * @var string
-     */
-    protected $body;
+    protected string $body;
 
-    /**
-     * @return string
-     */
-    public function getBody()
+    public function getBody(): string
     {
         return $this->body;
     }
 
-    /**
-     * @param string
-     */
-    public function setBody($body): void
+    public function setBody(string $body): void
     {
         $this->body = $body;
     }

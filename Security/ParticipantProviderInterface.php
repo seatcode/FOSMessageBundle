@@ -13,10 +13,5 @@ use FOS\MessageBundle\Model\ParticipantInterface;
  */
 interface ParticipantProviderInterface
 {
-    /**
-     * Gets the current authenticated user.
-     *
-     * @return ParticipantInterface
-     */
-    public function getAuthenticatedParticipant();
+    public function getAuthenticatedParticipant(): ParticipantInterface;
 }

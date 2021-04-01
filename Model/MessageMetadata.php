@@ -6,13 +6,10 @@ namespace FOS\MessageBundle\Model;
 
 abstract class MessageMetadata
 {
-    protected $participant;
-    protected $isRead = false;
+    protected ParticipantInterface $participant;
+    protected bool $isRead = false;
 
-    /**
-     * @return ParticipantInterface
-     */
-    public function getParticipant()
+    public function getParticipant(): ParticipantInterface
     {
         return $this->participant;
     }
@@ -22,19 +19,13 @@ abstract class MessageMetadata
         $this->participant = $participant;
     }
 
-    /**
-     * @return bool
-     */
-    public function getIsRead()
+    public function getIsRead(): bool
     {
         return $this->isRead;
     }
 
-    /**
-     * @param bool $isRead
-     */
-    public function setIsRead($isRead): void
+    public function setIsRead(bool $isRead): void
     {
-        $this->isRead = (bool) $isRead;
+        $this->isRead = $isRead;
     }
 }

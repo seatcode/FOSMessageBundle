@@ -10,15 +10,8 @@ use Ornicar\AkismetBundle\Akismet\AkismetInterface;
 
 class AkismetSpamDetector implements SpamDetectorInterface
 {
-    /**
-     * @var AkismetInterface
-     */
-    protected $akismet;
-
-    /**
-     * @var ParticipantProviderInterface
-     */
-    protected $participantProvider;
+    protected AkismetInterface $akismet;
+    protected ParticipantProviderInterface $participantProvider;
 
     public function __construct(AkismetInterface $akismet, ParticipantProviderInterface $participantProvider)
     {
@@ -29,7 +22,7 @@ class AkismetSpamDetector implements SpamDetectorInterface
     /**
      * {@inheritdoc}
      */
-    public function isSpam(NewThreadMessage $message)
+    public function isSpam(NewThreadMessage $message): bool
     {
         return $this->akismet->isSpam([
             'comment_author' => (string) $this->participantProvider->getAuthenticatedParticipant(),

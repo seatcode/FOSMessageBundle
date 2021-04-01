@@ -7,9 +7,6 @@ namespace FOS\MessageBundle\Search;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * Gets the search term from the request and prepares it.
- */
 final class QueryFactory implements QueryFactoryInterface
 {
     public function __construct(

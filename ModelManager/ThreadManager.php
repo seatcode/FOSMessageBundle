@@ -14,12 +14,7 @@ use FOS\MessageBundle\Model\ThreadInterface;
  */
 abstract class ThreadManager implements ThreadManagerInterface
 {
-    /**
-     * Creates an empty comment thread instance.
-     *
-     * @return ThreadInterface
-     */
-    public function createThread()
+    public function createThread(): ThreadInterface
     {
         $class = $this->getClass();
 

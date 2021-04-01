@@ -4,74 +4,45 @@ declare(strict_types=1);
 
 namespace FOS\MessageBundle\Search;
 
-/**
- * Search term.
- */
-class Query
+use Stringable;
+
+class Query implements Stringable
 {
-    /**
-     * @var string
-     */
-    protected $original;
+    protected string $original;
+    protected string $escaped;
 
-    /**
-     * @var string
-     */
-    protected $escaped;
-
-    /**
-     * @param string $original
-     * @param string $escaped
-     */
-    public function __construct($original, $escaped)
+    public function __construct(string $original, string $escaped)
     {
         $this->original = $original;
         $this->escaped = $escaped;
     }
 
-    /**
-     * @return string original
-     */
-    public function getOriginal()
+    public function getOriginal(): string
     {
         return $this->original;
     }
 
-    /**
-     * @param string $original
-     */
-    public function setOriginal($original): void
+    public function setOriginal(string $original): void
     {
         $this->original = $original;
     }
 
-    /**
-     * @return string escaped
-     */
-    public function getEscaped()
+    public function getEscaped(): string
     {
         return $this->escaped;
     }
 
-    /**
-     * @param string $escaped
-     */
-    public function setEscaped($escaped): void
+    public function setEscaped(string $escaped): void
     {
         $this->escaped = $escaped;
     }
 
-    /**
-     * Converts to the original term string.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getOriginal();
+        return $this->getOriginal();
     }
 
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return empty($this->original);
     }

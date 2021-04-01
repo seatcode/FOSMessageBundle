@@ -9,6 +9,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Message form type for starting a new conversation.
@@ -24,11 +26,11 @@ class NewThreadMessageFormType extends AbstractType
                 'label' => 'recipient',
                 'translation_domain' => 'FOSMessageBundle',
             ])
-            ->add('subject', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\TextType'), [
+            ->add('subject', LegacyFormHelper::getType(TextType::class), [
                 'label' => 'subject',
                 'translation_domain' => 'FOSMessageBundle',
             ])
-            ->add('body', LegacyFormHelper::getType('Symfony\Component\Form\Extension\Core\Type\TextareaType'), [
+            ->add('body', LegacyFormHelper::getType(TextareaType::class), [
                 'label' => 'body',
                 'translation_domain' => 'FOSMessageBundle',
             ]);
@@ -44,24 +46,8 @@ class NewThreadMessageFormType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'fos_message_new_thread';
-    }
-
-    /**
-     * @deprecated To remove when supporting only Symfony 3
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver): void
-    {
-        $this->configureOptions($resolver);
-    }
-
-    /**
-     * @deprecated To remove when supporting only Symfony 3
-     */
-    public function getName()
-    {
-        return $this->getBlockPrefix();
     }
 }

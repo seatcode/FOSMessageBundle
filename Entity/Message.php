@@ -15,7 +15,7 @@ abstract class Message extends BaseMessage
      *
      * @return Collection
      */
-    public function getAllMetadata()
+    public function getAllMetadata(): Collection
     {
         return $this->metadata;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FOS\MessageBundle\Entity;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use FOS\MessageBundle\Model\MessageInterface;
@@ -18,48 +19,39 @@ abstract class Thread extends BaseThread
      *
      * @var Collection|MessageInterface[]
      */
-    protected $messages;
+    protected Collection | array $messages;
 
     /**
      * Users participating in this conversation.
      *
      * @var Collection|ParticipantInterface[]
      */
-    protected $participants;
+    protected Collection | array $participants;
 
     /**
      * Thread metadata.
      *
      * @var Collection|ModelThreadMetadata[]
      */
-    protected $metadata;
+    protected Collection | array $metadata;
 
     /**
      * All text contained in the thread messages
      * Used for the full text search.
-     *
-     * @var string
      */
-    protected $keywords = '';
+    protected string $keywords = '';
 
     /**
      * Participant that created the thread.
-     *
-     * @var ParticipantInterface
      */
-    protected $createdBy;
+    protected ParticipantInterface $createdBy;
 
     /**
      * Date this thread was created at.
-     *
-     * @var \DateTime
      */
-    protected $createdAt;
+    protected DateTimeInterface $createdAt;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getParticipants()
+    public function getParticipants(): Collection | array
     {
         return $this->getParticipantsCollection()->toArray();
     }
@@ -72,7 +64,7 @@ abstract class Thread extends BaseThread
      *
      * @return ArrayCollection|ParticipantInterface[]
      */
-    protected function getParticipantsCollection()
+    protected function getParticipantsCollection(): Collection | array
     {
         if (null === $this->participants) {
             $this->participants = new ArrayCollection();
@@ -85,9 +77,6 @@ abstract class Thread extends BaseThread
         return $this->participants;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addParticipant(ParticipantInterface $participant): void
     {
         if (!$this->isParticipant($participant)) {
@@ -104,12 +93,8 @@ abstract class Thread extends BaseThread
      *
      * @return Thread
      */
-    public function addParticipants($participants)
+    public function addParticipants(iterable $participants): static
     {
-        if (!is_array($participants) && !$participants instanceof \Traversable) {
-            throw new \InvalidArgumentException('Participants must be an array or instance of Traversable');
-        }
-
         foreach ($participants as $participant) {
             $this->addParticipant($participant);
         }
@@ -117,10 +102,7 @@ abstract class Thread extends BaseThread
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isParticipant(ParticipantInterface $participant)
+    public function isParticipant(ParticipantInterface $participant): bool
     {
         return $this->getParticipantsCollection()->contains($participant);
     }
@@ -130,17 +112,15 @@ abstract class Thread extends BaseThread
      *
      * @return Collection
      */
-    public function getAllMetadata()
+    public function getAllMetadata(): array | Collection
     {
         return $this->metadata;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addMetadata(ModelThreadMetadata $meta): void
     {
         $meta->setThread($this);
+
         parent::addMetadata($meta);
     }
 }

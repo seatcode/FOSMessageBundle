@@ -9,21 +9,15 @@ use FOS\MessageBundle\Model\MessageMetadata as BaseMessageMetadata;
 
 abstract class MessageMetadata extends BaseMessageMetadata
 {
-    protected $id;
-    protected $message;
+    protected int $id;
+    protected MessageInterface $message;
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return MessageInterface
-     */
-    public function getMessage()
+    public function getMessage(): MessageInterface
     {
         return $this->message;
     }

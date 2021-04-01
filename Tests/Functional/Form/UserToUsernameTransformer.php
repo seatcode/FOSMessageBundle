@@ -8,7 +8,7 @@ use FOS\MessageBundle\Tests\Functional\Entity\User;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
-class UserToUsernameTransformer implements DataTransformerInterface
+final class UserToUsernameTransformer implements DataTransformerInterface
 {
     public function transform($value)
     {

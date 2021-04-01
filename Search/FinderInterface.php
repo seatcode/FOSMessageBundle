@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace FOS\MessageBundle\Search;
 
+use Doctrine\ORM\QueryBuilder;
 use FOS\MessageBundle\Model\ThreadInterface;
 
 /**
@@ -18,12 +19,10 @@ interface FinderInterface
      *
      * @return ThreadInterface[]
      */
-    public function find(Query $query);
+    public function find(Query $query): array;
 
     /**
      * Finds threads of a participant, matching a given query.
-     *
-     * @return Builder a query builder suitable for pagination
      */
-    public function getQueryBuilder(Query $query);
+    public function getQueryBuilder(Query $query): QueryBuilder;
 }

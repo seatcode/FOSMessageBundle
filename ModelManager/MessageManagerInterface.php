@@ -17,31 +17,8 @@ use FOS\MessageBundle\Model\ParticipantInterface;
  */
 interface MessageManagerInterface extends ReadableManagerInterface
 {
-    /**
-     * Tells how many unread, non-spam, messages this participant has.
-     *
-     * @return int the number of unread messages
-     */
-    public function getNbUnreadMessageByParticipant(ParticipantInterface $participant);
-
-    /**
-     * Creates an empty message instance.
-     *
-     * @return MessageInterface
-     */
-    public function createMessage();
-
-    /**
-     * Saves a message.
-     *
-     * @param bool $andFlush Whether to flush the changes (default true)
-     */
-    public function saveMessage(MessageInterface $message, $andFlush = true);
-
-    /**
-     * Returns the message's fully qualified class MessageManagerInterface.
-     *
-     * @return string
-     */
-    public function getClass();
+    public function getNbUnreadMessageByParticipant(ParticipantInterface $participant): int;
+    public function createMessage(): MessageInterface;
+    public function saveMessage(MessageInterface $message, bool $andFlush = true): void;
+    public function getClass(): string;
 }

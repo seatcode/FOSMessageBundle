@@ -18,7 +18,7 @@ use FOS\MessageBundle\Tests\Functional\Entity\Message;
  */
 class MessageManager extends BaseMessageManager
 {
-    public function getNbUnreadMessageByParticipant(ParticipantInterface $participant)
+    public function getNbUnreadMessageByParticipant(ParticipantInterface $participant): int
     {
         return 3;
     }
@@ -31,19 +31,19 @@ class MessageManager extends BaseMessageManager
     {
     }
 
-    public function markIsReadByThreadAndParticipant(ThreadInterface $thread, ParticipantInterface $participant, $isRead): void
+    public function markIsReadByThreadAndParticipant(ThreadInterface $thread, ParticipantInterface $participant, bool $isRead): void
     {
     }
 
-    protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, $isRead): void
+    protected function markIsReadByParticipant(MessageInterface $message, ParticipantInterface $participant, bool $isRead): void
     {
     }
 
-    public function saveMessage(MessageInterface $message, $andFlush = true): void
+    public function saveMessage(MessageInterface $message, bool $andFlush = true): void
     {
     }
 
-    public function getClass()
+    public function getClass(): string
     {
         return Message::class;
     }

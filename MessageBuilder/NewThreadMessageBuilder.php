@@ -14,34 +14,21 @@ use FOS\MessageBundle\Model\ParticipantInterface;
  */
 class NewThreadMessageBuilder extends AbstractMessageBuilder
 {
-    /**
-     * The thread subject.
-     *
-     * @param  string
-     *
-     * @return NewThreadMessageBuilder (fluent interface)
-     */
-    public function setSubject($subject)
+    public function setSubject(string $subject): static
     {
         $this->thread->setSubject($subject);
 
         return $this;
     }
 
-    /**
-     * @return NewThreadMessageBuilder (fluent interface)
-     */
-    public function addRecipient(ParticipantInterface $recipient)
+    public function addRecipient(ParticipantInterface $recipient): static
     {
         $this->thread->addParticipant($recipient);
 
         return $this;
     }
 
-    /**
-     * @return NewThreadMessageBuilder
-     */
-    public function addRecipients(Collection $recipients)
+    public function addRecipients(Collection $recipients): static
     {
         foreach ($recipients as $recipient) {
             $this->addRecipient($recipient);

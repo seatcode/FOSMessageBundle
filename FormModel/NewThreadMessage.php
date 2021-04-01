@@ -8,48 +8,25 @@ use FOS\MessageBundle\Model\ParticipantInterface;
 
 class NewThreadMessage extends AbstractMessage
 {
-    /**
-     * The user who receives the message.
-     *
-     * @var ParticipantInterface
-     */
-    protected $recipient;
+    protected ParticipantInterface $recipient;
+    protected string $subject;
 
-    /**
-     * The thread subject.
-     *
-     * @var string
-     */
-    protected $subject;
-
-    /**
-     * @return string
-     */
-    public function getSubject()
+    public function getSubject(): string
     {
         return $this->subject;
     }
 
-    /**
-     * @param string
-     */
-    public function setSubject($subject): void
+    public function setSubject(string $subject): void
     {
         $this->subject = $subject;
     }
 
-    /**
-     * @return ParticipantInterface
-     */
-    public function getRecipient()
+    public function getRecipient(): ParticipantInterface
     {
         return $this->recipient;
     }
 
-    /**
-     * @param ParticipantInterface
-     */
-    public function setRecipient($recipient): void
+    public function setRecipient(ParticipantInterface $recipient): void
     {
         $this->recipient = $recipient;
     }

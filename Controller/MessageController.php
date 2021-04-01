@@ -59,7 +59,7 @@ final class MessageController extends AbstractController
         ]);
     }
 
-    public function threadAction(string $threadId): Response
+    public function threadAction(int $threadId): Response
     {
         $thread = $this->provider->getThread($threadId);
         $form = $this->replyMessageFormFactory->create($thread);
@@ -92,7 +92,7 @@ final class MessageController extends AbstractController
         ]);
     }
 
-    public function deleteAction(string $threadId): RedirectResponse
+    public function deleteAction(int $threadId): RedirectResponse
     {
         $thread = $this->provider->getThread($threadId);
         $this->deleter->markAsDeleted($thread);
@@ -101,7 +101,7 @@ final class MessageController extends AbstractController
         return $this->redirectToRoute('fos_message_inbox');
     }
 
-    public function undeleteAction(string $threadId): Response
+    public function undeleteAction(int $threadId): Response
     {
         $thread = $this->provider->getThread($threadId);
         $this->deleter->markAsUndeleted($thread);

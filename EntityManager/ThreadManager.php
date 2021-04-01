@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace FOS\MessageBundle\EntityManager;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ObjectRepository;
 use FOS\MessageBundle\Model\ParticipantInterface;
 use FOS\MessageBundle\Model\ReadableInterface;
 use FOS\MessageBundle\Model\ThreadInterface;
+use FOS\MessageBundle\ModelManager\Builder;
 use FOS\MessageBundle\ModelManager\ThreadManager as BaseThreadManager;
 
 /**
@@ -17,43 +20,18 @@ use FOS\MessageBundle\ModelManager\ThreadManager as BaseThreadManager;
  */
 class ThreadManager extends BaseThreadManager
 {
-    /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
-     * @var DocumentRepository
-     */
-    protected $repository;
-
-    /**
-     * The model class.
-     *
-     * @var string
-     */
-    protected $class;
-
-    /**
-     * The model class.
-     *
-     * @var string
-     */
-    protected $metaClass;
+    protected EntityManagerInterface $em;
+    protected ObjectRepository $repository;
+    protected string $class;
+    protected string $metaClass;
 
     /**
      * The message manager, required to mark
      * the messages of a thread as read/unread.
-     *
-     * @var MessageManager
      */
-    protected $messageManager;
+    protected MessageManager $messageManager;
 
-    /**
-     * @param string $class
-     * @param string $metaClass
-     */
-    public function __construct(EntityManager $em, $class, $metaClass, MessageManager $messageManager)
+    public function __construct(EntityManagerInterface $em, string $class, string $metaClass, MessageManager $messageManager)
     {
         $this->em = $em;
         $this->repository = $em->getRepository($class);
@@ -62,10 +40,7 @@ class ThreadManager extends BaseThreadManager
         $this->messageManager = $messageManager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findThreadById($id)
+    public function findThreadById(int $id): ?ThreadInterface
     {
         return $this->repository->find($id);
     }
@@ -73,7 +48,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function getParticipantInboxThreadsQueryBuilder(ParticipantInterface $participant)
+    public function getParticipantInboxThreadsQueryBuilder(ParticipantInterface $participant): QueryBuilder
     {
         return $this->repository->createQueryBuilder('t')
             ->innerJoin('t.metadata', 'tm')
@@ -102,7 +77,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function findParticipantInboxThreads(ParticipantInterface $participant)
+    public function findParticipantInboxThreads(ParticipantInterface $participant): array
     {
         return $this->getParticipantInboxThreadsQueryBuilder($participant)
             ->getQuery()
@@ -112,7 +87,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function getParticipantSentThreadsQueryBuilder(ParticipantInterface $participant)
+    public function getParticipantSentThreadsQueryBuilder(ParticipantInterface $participant): QueryBuilder
     {
         return $this->repository->createQueryBuilder('t')
             ->innerJoin('t.metadata', 'tm')
@@ -141,7 +116,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function findParticipantSentThreads(ParticipantInterface $participant)
+    public function findParticipantSentThreads(ParticipantInterface $participant): array
     {
         return $this->getParticipantSentThreadsQueryBuilder($participant)
             ->getQuery()
@@ -151,7 +126,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function getParticipantDeletedThreadsQueryBuilder(ParticipantInterface $participant)
+    public function getParticipantDeletedThreadsQueryBuilder(ParticipantInterface $participant): QueryBuilder
     {
         return $this->repository->createQueryBuilder('t')
             ->innerJoin('t.metadata', 'tm')
@@ -173,7 +148,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function findParticipantDeletedThreads(ParticipantInterface $participant)
+    public function findParticipantDeletedThreads(ParticipantInterface $participant): array
     {
         return $this->getParticipantDeletedThreadsQueryBuilder($participant)
             ->getQuery()
@@ -183,7 +158,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search): void
+    public function getParticipantThreadsBySearchQueryBuilder(ParticipantInterface $participant, $search): QueryBuilder
     {
         // remove all non-word chars
         $search = preg_replace('/[^\w]/', ' ', trim($search));
@@ -196,7 +171,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function findParticipantThreadsBySearch(ParticipantInterface $participant, $search)
+    public function findParticipantThreadsBySearch(ParticipantInterface $participant, $search): array
     {
         return $this->getParticipantThreadsBySearchQueryBuilder($participant, $search)
             ->getQuery()
@@ -206,7 +181,7 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function findThreadsCreatedBy(ParticipantInterface $participant)
+    public function findThreadsCreatedBy(ParticipantInterface $participant): array
     {
         return $this->repository->createQueryBuilder('t')
             ->innerJoin('t.createdBy', 'p')
@@ -221,23 +196,23 @@ class ThreadManager extends BaseThreadManager
     /**
      * {@inheritdoc}
      */
-    public function markAsReadByParticipant(ReadableInterface $readable, ParticipantInterface $participant)
+    public function markAsReadByParticipant(ReadableInterface $readable, ParticipantInterface $participant): void
     {
-        return $this->messageManager->markIsReadByThreadAndParticipant($readable, $participant, true);
+        $this->messageManager->markIsReadByThreadAndParticipant($readable, $participant, true);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function markAsUnreadByParticipant(ReadableInterface $readable, ParticipantInterface $participant)
+    public function markAsUnreadByParticipant(ReadableInterface $readable, ParticipantInterface $participant): void
     {
-        return $this->messageManager->markIsReadByThreadAndParticipant($readable, $participant, false);
+        $this->messageManager->markIsReadByThreadAndParticipant($readable, $participant, false);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function saveThread(ThreadInterface $thread, $andFlush = true): void
+    public function saveThread(ThreadInterface $thread, bool $andFlush = true): void
     {
         $this->denormalize($thread);
         $this->em->persist($thread);
@@ -260,7 +235,7 @@ class ThreadManager extends BaseThreadManager
      *
      * @return string
      */
-    public function getClass()
+    public function getClass(): string
     {
         return $this->class;
     }

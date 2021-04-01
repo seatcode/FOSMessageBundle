@@ -11,7 +11,7 @@ class NoopSpamDetector implements SpamDetectorInterface
     /**
      * {@inheritdoc}
      */
-    public function isSpam(NewThreadMessage $message)
+    public function isSpam(NewThreadMessage $message): bool
     {
         return false;
     }

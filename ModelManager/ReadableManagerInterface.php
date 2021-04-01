@@ -22,10 +22,10 @@ interface ReadableManagerInterface
      * We want to show the unread readables on the page,
      * as well as marking them as read.
      */
-    public function markAsReadByParticipant(ReadableInterface $readable, ParticipantInterface $user);
+    public function markAsReadByParticipant(ReadableInterface $readable, ParticipantInterface $user): void;
 
     /**
      * Marks the readable as unread by this participant.
      */
-    public function markAsUnreadByParticipant(ReadableInterface $readable, ParticipantInterface $user);
+    public function markAsUnreadByParticipant(ReadableInterface $readable, ParticipantInterface $user): void;
 }

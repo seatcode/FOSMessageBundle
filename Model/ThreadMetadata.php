@@ -4,29 +4,16 @@ declare(strict_types=1);
 
 namespace FOS\MessageBundle\Model;
 
+use DateTimeInterface;
+
 abstract class ThreadMetadata
 {
-    protected $participant;
-    protected $isDeleted = false;
+    protected ParticipantInterface $participant;
+    protected bool $isDeleted = false;
+    protected DateTimeInterface $lastParticipantMessageDate;
+    protected DateTimeInterface $lastMessageDate;
 
-    /**
-     * Date of last message written by the participant.
-     *
-     * @var \DateTime
-     */
-    protected $lastParticipantMessageDate;
-
-    /**
-     * Date of last message written by another participant.
-     *
-     * @var \DateTime
-     */
-    protected $lastMessageDate;
-
-    /**
-     * @return ParticipantInterface
-     */
-    public function getParticipant()
+    public function getParticipant(): ParticipantInterface
     {
         return $this->participant;
     }
@@ -36,44 +23,32 @@ abstract class ThreadMetadata
         $this->participant = $participant;
     }
 
-    /**
-     * @return bool
-     */
-    public function getIsDeleted()
+    public function getIsDeleted(): bool
     {
         return $this->isDeleted;
     }
 
-    /**
-     * @param bool $isDeleted
-     */
-    public function setIsDeleted($isDeleted): void
+    public function setIsDeleted(bool $isDeleted): void
     {
-        $this->isDeleted = (bool) $isDeleted;
+        $this->isDeleted = $isDeleted;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getLastParticipantMessageDate()
+    public function getLastParticipantMessageDate(): DateTimeInterface
     {
         return $this->lastParticipantMessageDate;
     }
 
-    public function setLastParticipantMessageDate(\DateTime $date): void
+    public function setLastParticipantMessageDate(DateTimeInterface $date): void
     {
         $this->lastParticipantMessageDate = $date;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getLastMessageDate()
+    public function getLastMessageDate(): DateTimeInterface
     {
         return $this->lastMessageDate;
     }
 
-    public function setLastMessageDate(\DateTime $date): void
+    public function setLastMessageDate(DateTimeInterface $date): void
     {
         $this->lastMessageDate = $date;
     }

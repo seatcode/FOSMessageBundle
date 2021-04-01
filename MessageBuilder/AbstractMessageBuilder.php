@@ -15,19 +15,8 @@ use FOS\MessageBundle\Model\ThreadInterface;
  */
 abstract class AbstractMessageBuilder
 {
-    /**
-     * The message we are building.
-     *
-     * @var MessageInterface
-     */
-    protected $message;
-
-    /**
-     * The thread the message goes in.
-     *
-     * @var ThreadInterface
-     */
-    protected $thread;
+    protected MessageInterface $message;
+    protected ThreadInterface $thread;
 
     public function __construct(MessageInterface $message, ThreadInterface $thread)
     {
@@ -43,27 +32,19 @@ abstract class AbstractMessageBuilder
      *
      * @return MessageInterface the message created
      */
-    public function getMessage()
+    public function getMessage(): MessageInterface
     {
         return $this->message;
     }
 
-    /**
-     * @param  string
-     *
-     * @return AbstractMessageBuilder (fluent interface)
-     */
-    public function setBody($body)
+    public function setBody(string $body): static
     {
         $this->message->setBody($body);
 
         return $this;
     }
 
-    /**
-     * @return AbstractMessageBuilder (fluent interface)
-     */
-    public function setSender(ParticipantInterface $sender)
+    public function setSender(ParticipantInterface $sender): static
     {
         $this->message->setSender($sender);
         $this->thread->addParticipant($sender);

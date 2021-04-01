@@ -75,7 +75,6 @@ final class TestKernel extends Kernel
         ]);
 
         $container->extension('fos_message', [
-            'db_driver' => 'orm',
             'thread_class' => Thread::class,
             'message_class' => Message::class,
         ]);

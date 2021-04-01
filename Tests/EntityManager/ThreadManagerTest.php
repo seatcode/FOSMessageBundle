@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace FOS\MessageBundle\Tests\EntityManager;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
+use FOS\MessageBundle\Entity\Message;
 use FOS\MessageBundle\EntityManager\ThreadManager;
+use FOS\MessageBundle\Model\MessageInterface;
+use FOS\MessageBundle\Model\ParticipantInterface;
 use FOS\MessageBundle\Model\ThreadInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ThreadManagerTest.
- *
- * @author Tobias Nyholm
- */
-class ThreadManagerTest extends TestCase
+final class ThreadManagerTest extends TestCase
 {
     protected $user;
     protected $date;
 
     public function setUp(): void
     {
-        $this->user = $this->createParticipantMock('4711');
+        $this->user = $this->createParticipantMock(4711);
         $this->date = new \DateTime('2013-12-25');
     }
 
@@ -29,12 +30,12 @@ class ThreadManagerTest extends TestCase
      */
     public function testDoCreatedByAndAt(): void
     {
-        $thread = $this->createThreadMock();
-        $thread->expects($this->exactly(1))->method('getFirstMessage')
-            ->will($this->returnValue($this->createMessageMock()));
+        $thread = $this->createThreadMock($this->user, $this->date, $this->createMessageMock());
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
+
+        $this->assertSame(1, $thread->getNumberOfTimesCalled('getFirstMessage'));
     }
 
     /**
@@ -42,18 +43,15 @@ class ThreadManagerTest extends TestCase
      */
     public function testDoCreatedByAndAtWithCreatedBy(): void
     {
-        $thread = $this->createThreadMock();
-
-        $thread->expects($this->exactly(0))->method('setCreatedBy');
-        $thread->expects($this->exactly(1))->method('setCreatedAt');
-        $thread->expects($this->exactly(1))->method('getCreatedBy')
-            ->will($this->returnValue($this->user));
-
-        $thread->expects($this->exactly(1))->method('getFirstMessage')
-            ->will($this->returnValue($this->createMessageMock()));
+        $thread = $this->createThreadMock($this->user, null, $this->createMessageMock());
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
+
+        self::assertSame(0, $thread->getNumberOfTimesCalled('setCreatedBy'));
+        self::assertSame(1, $thread->getNumberOfTimesCalled('setCreatedAt'));
+        self::assertSame(1, $thread->getNumberOfTimesCalled('getCreatedBy'));
+        self::assertSame(1, $thread->getNumberOfTimesCalled('getFirstMessage'));
     }
 
     /**
@@ -61,18 +59,15 @@ class ThreadManagerTest extends TestCase
      */
     public function testDoCreatedByAndAtWithCreatedAt(): void
     {
-        $thread = $this->createThreadMock();
-
-        $thread->expects($this->exactly(1))->method('setCreatedBy');
-        $thread->expects($this->exactly(0))->method('setCreatedAt');
-        $thread->expects($this->exactly(1))->method('getCreatedAt')
-            ->will($this->returnValue($this->date));
-
-        $thread->expects($this->exactly(1))->method('getFirstMessage')
-            ->will($this->returnValue($this->createMessageMock()));
+        $thread = $this->createThreadMock(null, $this->date, $this->createMessageMock());
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
+
+        self::assertSame(1, $thread->getNumberOfTimesCalled('setCreatedBy'));
+        self::assertSame(0, $thread->getNumberOfTimesCalled('setCreatedAt'));
+        self::assertSame(1, $thread->getNumberOfTimesCalled('getCreatedBy'));
+        self::assertSame(1, $thread->getNumberOfTimesCalled('getFirstMessage'));
     }
 
     /**
@@ -80,20 +75,16 @@ class ThreadManagerTest extends TestCase
      */
     public function testDoCreatedByAndAtWithCreatedAtAndBy(): void
     {
-        $thread = $this->createThreadMock();
-        $thread->expects($this->exactly(0))->method('setCreatedBy');
-        $thread->expects($this->exactly(0))->method('setCreatedAt');
-        $thread->expects($this->exactly(1))->method('getCreatedAt')
-            ->will($this->returnValue($this->date));
-
-        $thread->expects($this->exactly(1))->method('getCreatedBy')
-            ->will($this->returnValue($this->user));
-
-        $thread->expects($this->exactly(1))->method('getFirstMessage')
-            ->will($this->returnValue($this->createMessageMock()));
+        $thread = $this->createThreadMock($this->user, $this->date, $this->createMessageMock());
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
+
+        self::assertSame(0, $thread->getNumberOfTimesCalled('setCreatedBy'));
+        self::assertSame(0, $thread->getNumberOfTimesCalled('setCreatedAt'));
+        self::assertSame(1, $thread->getNumberOfTimesCalled('getCreatedBy'));
+        self::assertSame(1, $thread->getNumberOfTimesCalled('getCreatedAt'));
+        self::assertSame(1, $thread->getNumberOfTimesCalled('getFirstMessage'));
     }
 
     /**
@@ -101,89 +92,189 @@ class ThreadManagerTest extends TestCase
      */
     public function testDoCreatedByAndNoMessage(): void
     {
-        $thread = $this->createThreadMock();
-        $thread->expects($this->exactly(0))->method('setCreatedBy');
-        $thread->expects($this->exactly(0))->method('setCreatedAt');
-        $thread->expects($this->exactly(0))
-            ->method('getCreatedAt')
-            ->will($this->returnValue($this->date));
-        $thread->expects($this->exactly(0))
-            ->method('getCreatedBy')
-            ->will($this->returnValue($this->user));
+        $thread = $this->createThreadMock($this->user, $this->date, null);
 
         $threadManager = new TestThreadManager();
         $threadManager->doCreatedByAndAt($thread);
+
+        self::assertSame(0, $thread->getNumberOfTimesCalled('setCreatedBy'));
+        self::assertSame(0, $thread->getNumberOfTimesCalled('setCreatedAt'));
+        self::assertSame(0, $thread->getNumberOfTimesCalled('getCreatedAt'));
+        self::assertSame(0, $thread->getNumberOfTimesCalled('getCreatedBy'));
     }
 
-    /**
-     * Get a message mock.
-     *
-     * @return mixed
-     */
-    protected function createMessageMock()
+    private function createMessageMock(): MessageInterface
     {
-        $message = $this->getMockBuilder('FOS\MessageBundle\Document\Message')
-            ->getMock();
+        return new class($this->user, $this->date) extends Message {
+            public function __construct(
+                private $user,
+                private $date
+            ) {
+            }
 
-        $message->expects($this->any())
-            ->method('getSender')
-            ->will($this->returnValue($this->user));
+            public function getCreatedAt(): DateTimeInterface
+            {
+                return $this->date;
+            }
 
-        $message->expects($this->any())
-            ->method('getCreatedAt')
-            ->will($this->returnValue($this->date));
-
-        return $message;
+            public function getSender(): ParticipantInterface
+            {
+                return $this->user;
+            }
+        };
     }
 
-    /**
-     * Add expectations on the thread mock.
-     *
-     * @param mock &$thread
-     * @param int  $createdByCalls
-     * @param int  $createdAtCalls
-     */
-    protected function addThreadExpectations(&$thread, $createdByCalls = 1, $createdAtCalls = 1): void
+    protected function createParticipantMock(int $id): MockObject | ParticipantInterface
     {
-        $thread->expects($this->exactly($createdByCalls))
-            ->method('setCreatedBy')
-            ->with($this->equalTo($this->user));
-
-        $thread->expects($this->exactly($createdAtCalls))
-            ->method('setCreatedAt')
-            ->with($this->equalTo($this->date));
-    }
-
-    /**
-     * Get a Participant.
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    protected function createParticipantMock($id)
-    {
-        $participant = $this->getMockBuilder('FOS\MessageBundle\Model\ParticipantInterface')
+        $participant = $this->getMockBuilder(ParticipantInterface::class)
             ->disableOriginalConstructor(true)
             ->getMock();
 
-        $participant->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($id));
+        $participant->method('getId')->willReturn($id);
 
         return $participant;
     }
 
-    /**
-     * Returns a thread mock.
-     *
-     * @return mixed
-     */
-    protected function createThreadMock()
+    protected function createThreadMock(mixed $user, mixed $date, ?MessageInterface $message)
     {
-        return $this->getMockBuilder('FOS\MessageBundle\Model\ThreadInterface')
-            ->disableOriginalConstructor(true)
-            ->getMock();
+        return new class($user, $date, $message) implements ThreadInterface {
+            private array $calledMethods = [];
+
+            public function __construct(private $user, private $date, private ?MessageInterface $message)
+            {
+            }
+
+            public function isReadByParticipant(ParticipantInterface $participant): bool
+            {
+                // TODO: Implement isReadByParticipant() method.
+            }
+
+            public function setIsReadByParticipant(ParticipantInterface $participant, bool $isRead): void
+            {
+                // TODO: Implement setIsReadByParticipant() method.
+            }
+
+            public function getId(): int
+            {
+                // TODO: Implement getId() method.
+            }
+
+            public function getSubject(): string
+            {
+                // TODO: Implement getSubject() method.
+            }
+
+            public function setSubject(string $subject): void
+            {
+                // TODO: Implement setSubject() method.
+            }
+
+            public function getMessages(): Collection | array
+            {
+                // TODO: Implement getMessages() method.
+            }
+
+            public function addMessage(MessageInterface $message): void
+            {
+                // TODO: Implement addMessage() method.
+            }
+
+            public function getFirstMessage(): ?MessageInterface
+            {
+                if (!isset($this->calledMethods[__FUNCTION__])) {
+                    $this->calledMethods[__FUNCTION__] = 0;
+                }
+
+                ++$this->calledMethods[__FUNCTION__];
+
+                return $this->message;
+            }
+
+            public function getLastMessage(): ?MessageInterface
+            {
+                // TODO: Implement getLastMessage() method.
+            }
+
+            public function getCreatedBy(): ?ParticipantInterface
+            {
+                if (!isset($this->calledMethods[__FUNCTION__])) {
+                    $this->calledMethods[__FUNCTION__] = 0;
+                }
+
+                ++$this->calledMethods[__FUNCTION__];
+
+                return $this->user;
+            }
+
+            public function setCreatedBy(ParticipantInterface $participant): void
+            {
+                if (!isset($this->calledMethods[__FUNCTION__])) {
+                    $this->calledMethods[__FUNCTION__] = 0;
+                }
+
+                ++$this->calledMethods[__FUNCTION__];
+            }
+
+            public function getCreatedAt(): ?DateTimeInterface
+            {
+                if (!isset($this->calledMethods[__FUNCTION__])) {
+                    $this->calledMethods[__FUNCTION__] = 0;
+                }
+
+                ++$this->calledMethods[__FUNCTION__];
+
+                return $this->date;
+            }
+
+            public function setCreatedAt(DateTimeInterface $createdAt): void
+            {
+                if (!isset($this->calledMethods[__FUNCTION__])) {
+                    $this->calledMethods[__FUNCTION__] = 0;
+                }
+
+                ++$this->calledMethods[__FUNCTION__];
+            }
+
+            public function getParticipants(): Collection | array
+            {
+                // TODO: Implement getParticipants() method.
+            }
+
+            public function isParticipant(ParticipantInterface $participant): bool
+            {
+                // TODO: Implement isParticipant() method.
+            }
+
+            public function addParticipant(ParticipantInterface $participant): void
+            {
+                // TODO: Implement addParticipant() method.
+            }
+
+            public function isDeletedByParticipant(ParticipantInterface $participant): bool
+            {
+                // TODO: Implement isDeletedByParticipant() method.
+            }
+
+            public function setIsDeletedByParticipant(ParticipantInterface $participant, bool $isDeleted): void
+            {
+                // TODO: Implement setIsDeletedByParticipant() method.
+            }
+
+            public function setIsDeleted(bool $isDeleted): void
+            {
+                // TODO: Implement setIsDeleted() method.
+            }
+
+            public function getOtherParticipants(ParticipantInterface $participant): array
+            {
+                // TODO: Implement getOtherParticipants() method.
+            }
+
+            public function getNumberOfTimesCalled(string $method): int
+            {
+                return $this->calledMethods[$method] ?? 0;
+            }
+        };
     }
 }
 

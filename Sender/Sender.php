@@ -18,20 +18,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Sender implements SenderInterface
 {
-    /**
-     * @var MessageManagerInterface
-     */
-    protected $messageManager;
-
-    /**
-     * @var ThreadManagerInterface
-     */
-    protected $threadManager;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
+    protected MessageManagerInterface $messageManager;
+    protected ThreadManagerInterface $threadManager;
+    protected EventDispatcherInterface $dispatcher;
 
     public function __construct(MessageManagerInterface $messageManager, ThreadManagerInterface $threadManager, EventDispatcherInterface $dispatcher)
     {
@@ -40,9 +29,6 @@ class Sender implements SenderInterface
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function send(MessageInterface $message): void
     {
         $this->threadManager->saveThread($message->getThread(), false);
@@ -56,6 +42,6 @@ class Sender implements SenderInterface
         $message->getThread()->setIsDeleted(false);
         $this->messageManager->saveMessage($message);
 
-        $this->dispatcher->dispatch(FOSMessageEvents::POST_SEND, new MessageEvent($message));
+        $this->dispatcher->dispatch(new MessageEvent($message), FOSMessageEvents::POST_SEND);
     }
 }

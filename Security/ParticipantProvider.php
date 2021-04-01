@@ -16,26 +16,16 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class ParticipantProvider implements ParticipantProviderInterface
 {
-    /**
-     * @var SecurityContextInterface|TokenStorageInterface
-     */
-    protected $securityContext;
+    protected TokenStorageInterface $tokenStorage;
 
-    public function __construct($securityContext)
+    public function __construct(TokenStorageInterface $tokenStorage)
     {
-        if (!$securityContext instanceof SecurityContextInterface && !$securityContext instanceof TokenStorageInterface) {
-            throw new \InvalidArgumentException(sprintf('Argument 1 passed to ParticipantProvider::__construct is not valid (instance of %s or %s expected, %s given)', 'Symfony\Component\Security\Core\SecurityContextInterface', 'Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface', is_object($securityContext) ? get_class($securityContext) : gettype($securityContext)));
-        }
-
-        $this->securityContext = $securityContext;
+        $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthenticatedParticipant()
+    public function getAuthenticatedParticipant(): ParticipantInterface
     {
-        $participant = $this->securityContext->getToken()->getUser();
+        $participant = $this->tokenStorage->getToken()?->getUser();
 
         if (!$participant instanceof ParticipantInterface) {
             throw new AccessDeniedException('Must be logged in with a ParticipantInterface instance');

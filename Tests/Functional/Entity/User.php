@@ -9,12 +9,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements ParticipantInterface, UserInterface
 {
-    public function getUsername()
+    public function getUsername(): string
     {
         return 'guilhem';
     }
 
-    public function getPassword()
+    public function getPassword(): string
     {
         return 'pass';
     }
@@ -23,7 +23,7 @@ class User implements ParticipantInterface, UserInterface
     {
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         return [];
     }
@@ -32,7 +32,7 @@ class User implements ParticipantInterface, UserInterface
     {
     }
 
-    public function getId()
+    public function getId(): int
     {
         return 1;
     }

@@ -19,26 +19,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Reader implements ReaderInterface
 {
-    /**
-     * The participantProvider instance.
-     *
-     * @var ParticipantProviderInterface
-     */
-    protected $participantProvider;
-
-    /**
-     * The readable manager.
-     *
-     * @var ReadableManagerInterface
-     */
-    protected $readableManager;
-
-    /**
-     * The event dispatcher.
-     *
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
+    protected ParticipantProviderInterface $participantProvider;
+    protected ReadableManagerInterface $readableManager;
+    protected EventDispatcherInterface $dispatcher;
 
     public function __construct(ParticipantProviderInterface $participantProvider, ReadableManagerInterface $readableManager, EventDispatcherInterface $dispatcher)
     {
@@ -53,12 +36,14 @@ class Reader implements ReaderInterface
     public function markAsRead(ReadableInterface $readable): void
     {
         $participant = $this->getAuthenticatedParticipant();
+
         if ($readable->isReadByParticipant($participant)) {
             return;
         }
+
         $this->readableManager->markAsReadByParticipant($readable, $participant);
 
-        $this->dispatcher->dispatch(FOSMessageEvents::POST_READ, new ReadableEvent($readable));
+        $this->dispatcher->dispatch(new ReadableEvent($readable), FOSMessageEvents::POST_READ);
     }
 
     /**
@@ -72,15 +57,10 @@ class Reader implements ReaderInterface
         }
         $this->readableManager->markAsUnreadByParticipant($readable, $participant);
 
-        $this->dispatcher->dispatch(FOSMessageEvents::POST_UNREAD, new ReadableEvent($readable));
+        $this->dispatcher->dispatch(new ReadableEvent($readable), FOSMessageEvents::POST_UNREAD);
     }
 
-    /**
-     * Gets the current authenticated user.
-     *
-     * @return ParticipantInterface
-     */
-    protected function getAuthenticatedParticipant()
+    protected function getAuthenticatedParticipant(): ParticipantInterface
     {
         return $this->participantProvider->getAuthenticatedParticipant();
     }
