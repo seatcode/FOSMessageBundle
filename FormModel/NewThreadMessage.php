@@ -8,10 +8,10 @@ use FOS\MessageBundle\Model\ParticipantInterface;
 
 class NewThreadMessage extends AbstractMessage
 {
-    protected ParticipantInterface $recipient;
-    protected string $subject;
+    protected ?ParticipantInterface $recipient = null;
+    protected ?string $subject = null;
 
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
@@ -21,7 +21,7 @@ class NewThreadMessage extends AbstractMessage
         $this->subject = $subject;
     }
 
-    public function getRecipient(): ParticipantInterface
+    public function getRecipient(): ?ParticipantInterface
     {
         return $this->recipient;
     }

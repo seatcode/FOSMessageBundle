@@ -10,10 +10,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class AuthorizationValidator extends ConstraintValidator
 {
-    /**
-     * @var AuthorizerInterface
-     */
-    protected $authorizer;
+    protected AuthorizerInterface $authorizer;
 
     public function __construct(AuthorizerInterface $authorizer)
     {

@@ -9,8 +9,8 @@ use Doctrine\Common\Collections\Collection;
 
 interface ThreadInterface extends ReadableInterface
 {
-    public function getId(): int;
-    public function getSubject(): string;
+    public function getId(): ?int;
+    public function getSubject(): ?string;
     public function setSubject(string $subject): void;
     public function getMessages(): Collection | array;
     public function addMessage(MessageInterface $message): void;

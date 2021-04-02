@@ -17,14 +17,14 @@ use InvalidArgumentException;
  */
 abstract class Thread implements ThreadInterface
 {
-    protected int $id;
-    protected string $subject;
+    protected ?int $id = null;
+    protected ?string $subject = null;
     protected bool $isSpam = false;
     protected Collection | array $messages;
     protected Collection | array $metadata;
     protected Collection | array $participants;
-    protected DateTimeInterface $createdAt;
-    protected ParticipantInterface $createdBy;
+    protected ?DateTimeInterface $createdAt = null;
+    protected ?ParticipantInterface $createdBy = null;
 
     public function __construct()
     {
@@ -33,7 +33,7 @@ abstract class Thread implements ThreadInterface
         $this->participants = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

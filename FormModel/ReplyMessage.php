@@ -8,9 +8,9 @@ use FOS\MessageBundle\Model\ThreadInterface;
 
 class ReplyMessage extends AbstractMessage
 {
-    protected ThreadInterface $thread;
+    protected ?ThreadInterface $thread;
 
-    public function getThread(): ThreadInterface
+    public function getThread(): ?ThreadInterface
     {
         return $this->thread;
     }

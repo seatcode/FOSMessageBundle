@@ -15,17 +15,12 @@ use Symfony\Component\Form\FormFactoryInterface;
  */
 abstract class AbstractMessageFormFactory
 {
-    protected FormFactoryInterface $formFactory;
-    protected string | AbstractType $formType;
-    protected string $formName;
-    protected string $messageClass;
-
-    public function __construct(FormFactoryInterface $formFactory, string | AbstractType $formType, string $formName, string $messageClass)
-    {
-        $this->formFactory = $formFactory;
-        $this->formType = $formType;
-        $this->formName = $formName;
-        $this->messageClass = $messageClass;
+    public function __construct(
+        protected FormFactoryInterface $formFactory,
+        protected string | AbstractType $formType,
+        protected string $formName,
+        protected string $messageClass
+    ) {
     }
 
     protected function createModelInstance(): AbstractMessage

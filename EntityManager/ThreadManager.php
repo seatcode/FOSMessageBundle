@@ -20,24 +20,15 @@ use FOS\MessageBundle\ModelManager\ThreadManager as BaseThreadManager;
  */
 class ThreadManager extends BaseThreadManager
 {
-    protected EntityManagerInterface $em;
     protected ObjectRepository $repository;
     protected string $class;
     protected string $metaClass;
 
-    /**
-     * The message manager, required to mark
-     * the messages of a thread as read/unread.
-     */
-    protected MessageManager $messageManager;
-
-    public function __construct(EntityManagerInterface $em, string $class, string $metaClass, MessageManager $messageManager)
+    public function __construct(protected EntityManagerInterface $em, string $class, string $metaClass, protected MessageManager $messageManager)
     {
-        $this->em = $em;
         $this->repository = $em->getRepository($class);
         $this->class = $em->getClassMetadata($class)->name;
         $this->metaClass = $em->getClassMetadata($metaClass)->name;
-        $this->messageManager = $messageManager;
     }
 
     public function findThreadById(int $id): ?ThreadInterface

@@ -14,11 +14,9 @@ use FOS\MessageBundle\Model\ThreadInterface;
  */
 class Authorizer implements AuthorizerInterface
 {
-    protected ParticipantProviderInterface $participantProvider;
-
-    public function __construct(ParticipantProviderInterface $participantProvider)
-    {
-        $this->participantProvider = $participantProvider;
+    public function __construct(
+        protected ParticipantProviderInterface $participantProvider
+    ) {
     }
 
     public function canSeeThread(ThreadInterface $thread): bool

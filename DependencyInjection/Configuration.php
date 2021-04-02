@@ -14,7 +14,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 /**
  * This class defines the configuration information for the bundle.
  */
-class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface
 {
     /**
      * Generates the configuration tree.

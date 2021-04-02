@@ -8,12 +8,12 @@ use DateTimeInterface;
 
 abstract class ThreadMetadata
 {
-    protected ParticipantInterface $participant;
+    protected ?ParticipantInterface $participant;
     protected bool $isDeleted = false;
-    protected DateTimeInterface $lastParticipantMessageDate;
-    protected DateTimeInterface $lastMessageDate;
+    protected ?DateTimeInterface $lastParticipantMessageDate;
+    protected ?DateTimeInterface $lastMessageDate;
 
-    public function getParticipant(): ParticipantInterface
+    public function getParticipant(): ?ParticipantInterface
     {
         return $this->participant;
     }
@@ -33,7 +33,7 @@ abstract class ThreadMetadata
         $this->isDeleted = $isDeleted;
     }
 
-    public function getLastParticipantMessageDate(): DateTimeInterface
+    public function getLastParticipantMessageDate(): ?DateTimeInterface
     {
         return $this->lastParticipantMessageDate;
     }
@@ -43,7 +43,7 @@ abstract class ThreadMetadata
         $this->lastParticipantMessageDate = $date;
     }
 
-    public function getLastMessageDate(): DateTimeInterface
+    public function getLastMessageDate(): ?DateTimeInterface
     {
         return $this->lastMessageDate;
     }

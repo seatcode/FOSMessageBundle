@@ -15,11 +15,11 @@ use Doctrine\Common\Collections\Collection;
  */
 abstract class Message implements MessageInterface
 {
-    protected int $id;
-    protected ParticipantInterface $sender;
-    protected string $body;
-    protected DateTimeInterface $createdAt;
-    protected ThreadInterface $thread;
+    protected ?int $id = null;
+    protected ?ParticipantInterface $sender = null;
+    protected ?string $body = null;
+    protected ?DateTimeInterface $createdAt = null;
+    protected ?ThreadInterface $thread = null;
     protected Collection | array $metadata;
 
     public function __construct()

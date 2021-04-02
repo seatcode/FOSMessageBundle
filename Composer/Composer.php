@@ -10,7 +10,7 @@ use FOS\MessageBundle\Model\ThreadInterface;
 use FOS\MessageBundle\ModelManager\MessageManagerInterface;
 use FOS\MessageBundle\ModelManager\ThreadManagerInterface;
 
-final class Composer implements ComposerInterface
+class Composer implements ComposerInterface
 {
     public function __construct(
         private MessageManagerInterface $messageManager,

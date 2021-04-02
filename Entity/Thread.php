@@ -11,6 +11,8 @@ use FOS\MessageBundle\Model\MessageInterface;
 use FOS\MessageBundle\Model\ParticipantInterface;
 use FOS\MessageBundle\Model\Thread as BaseThread;
 use FOS\MessageBundle\Model\ThreadMetadata as ModelThreadMetadata;
+use InvalidArgumentException;
+use Traversable;
 
 abstract class Thread extends BaseThread
 {
@@ -44,12 +46,12 @@ abstract class Thread extends BaseThread
     /**
      * Participant that created the thread.
      */
-    protected ParticipantInterface $createdBy;
+    protected ?ParticipantInterface $createdBy = null;
 
     /**
      * Date this thread was created at.
      */
-    protected DateTimeInterface $createdAt;
+    protected ?DateTimeInterface $createdAt = null;
 
     public function getParticipants(): Collection | array
     {
@@ -87,9 +89,9 @@ abstract class Thread extends BaseThread
     /**
      * Adds many participants to the thread.
      *
-     * @param array|\Traversable
+     * @param array|Traversable
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @return Thread
      */

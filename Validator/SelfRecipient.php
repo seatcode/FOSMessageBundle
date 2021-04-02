@@ -8,9 +8,9 @@ use Symfony\Component\Validator\Constraint;
 
 class SelfRecipient extends Constraint
 {
-    public $message = 'fos_message.self_recipient';
+    public string $message = 'fos_message.self_recipient';
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return 'fos_message.validator.self_recipient';
     }
@@ -18,7 +18,7 @@ class SelfRecipient extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function getTargets()
+    public function getTargets(): string
     {
         return self::PROPERTY_CONSTRAINT;
     }

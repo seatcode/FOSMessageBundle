@@ -21,19 +21,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class Provider implements ProviderInterface
 {
-    protected ThreadManagerInterface $threadManager;
-    protected MessageManagerInterface $messageManager;
-    protected ReaderInterface $threadReader;
-    protected AuthorizerInterface $authorizer;
-    protected ParticipantProviderInterface $participantProvider;
-
-    public function __construct(ThreadManagerInterface $threadManager, MessageManagerInterface $messageManager, ReaderInterface $threadReader, AuthorizerInterface $authorizer, ParticipantProviderInterface $participantProvider)
-    {
-        $this->threadManager = $threadManager;
-        $this->messageManager = $messageManager;
-        $this->threadReader = $threadReader;
-        $this->authorizer = $authorizer;
-        $this->participantProvider = $participantProvider;
+    public function __construct(
+        protected ThreadManagerInterface $threadManager,
+        protected MessageManagerInterface $messageManager,
+        protected ReaderInterface $threadReader,
+        protected AuthorizerInterface $authorizer,
+        protected ParticipantProviderInterface $participantProvider
+    ) {
     }
 
     /**

@@ -16,11 +16,9 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
  */
 class ParticipantProvider implements ParticipantProviderInterface
 {
-    protected TokenStorageInterface $tokenStorage;
-
-    public function __construct(TokenStorageInterface $tokenStorage)
-    {
-        $this->tokenStorage = $tokenStorage;
+    public function __construct(
+        protected TokenStorageInterface $tokenStorage
+    ) {
     }
 
     public function getAuthenticatedParticipant(): ParticipantInterface

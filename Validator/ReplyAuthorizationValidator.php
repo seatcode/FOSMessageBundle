@@ -11,15 +11,8 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class ReplyAuthorizationValidator extends ConstraintValidator
 {
-    /**
-     * @var AuthorizerInterface
-     */
-    protected $authorizer;
-
-    /**
-     * @var ParticipantProviderInterface
-     */
-    protected $participantProvider;
+    protected AuthorizerInterface $authorizer;
+    protected ParticipantProviderInterface $participantProvider;
 
     public function __construct(AuthorizerInterface $authorizer, ParticipantProviderInterface $participantProvider)
     {

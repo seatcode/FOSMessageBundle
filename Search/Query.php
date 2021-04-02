@@ -8,13 +8,10 @@ use Stringable;
 
 class Query implements Stringable
 {
-    protected string $original;
-    protected string $escaped;
-
-    public function __construct(string $original, string $escaped)
-    {
-        $this->original = $original;
-        $this->escaped = $escaped;
+    public function __construct(
+        protected string $original,
+        protected string $escaped
+    ) {
     }
 
     public function getOriginal(): string

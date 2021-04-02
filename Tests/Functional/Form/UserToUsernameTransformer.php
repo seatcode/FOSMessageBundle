@@ -7,6 +7,7 @@ namespace FOS\MessageBundle\Tests\Functional\Form;
 use FOS\MessageBundle\Tests\Functional\Entity\User;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UserToUsernameTransformer implements DataTransformerInterface
 {

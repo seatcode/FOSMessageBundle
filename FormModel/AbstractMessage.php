@@ -6,9 +6,9 @@ namespace FOS\MessageBundle\FormModel;
 
 abstract class AbstractMessage
 {
-    protected string $body;
+    protected ?string $body = null;
 
-    public function getBody(): string
+    public function getBody(): ?string
     {
         return $this->body;
     }

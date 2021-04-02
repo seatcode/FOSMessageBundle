@@ -18,15 +18,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Sender implements SenderInterface
 {
-    protected MessageManagerInterface $messageManager;
-    protected ThreadManagerInterface $threadManager;
-    protected EventDispatcherInterface $dispatcher;
-
-    public function __construct(MessageManagerInterface $messageManager, ThreadManagerInterface $threadManager, EventDispatcherInterface $dispatcher)
-    {
-        $this->messageManager = $messageManager;
-        $this->threadManager = $threadManager;
-        $this->dispatcher = $dispatcher;
+    public function __construct(
+        protected MessageManagerInterface $messageManager,
+        protected ThreadManagerInterface $threadManager,
+        protected EventDispatcherInterface $dispatcher
+    ) {
     }
 
     public function send(MessageInterface $message): void

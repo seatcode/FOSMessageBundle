@@ -7,7 +7,7 @@ namespace FOS\MessageBundle\Search;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-final class QueryFactory implements QueryFactoryInterface
+class QueryFactory implements QueryFactoryInterface
 {
     public function __construct(
         protected RequestStack $requestStack,

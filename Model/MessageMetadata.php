@@ -6,10 +6,10 @@ namespace FOS\MessageBundle\Model;
 
 abstract class MessageMetadata
 {
-    protected ParticipantInterface $participant;
+    protected ?ParticipantInterface $participant;
     protected bool $isRead = false;
 
-    public function getParticipant(): ParticipantInterface
+    public function getParticipant(): ?ParticipantInterface
     {
         return $this->participant;
     }

@@ -8,13 +8,10 @@ use FOS\MessageBundle\Model\MessageInterface;
 
 class MessageEvent extends ThreadEvent
 {
-    private MessageInterface $message;
-
-    public function __construct(MessageInterface $message)
-    {
+    public function __construct(
+        private MessageInterface $message
+    ) {
         parent::__construct($message->getThread());
-
-        $this->message = $message;
     }
 
     public function getMessage(): MessageInterface

@@ -19,15 +19,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Reader implements ReaderInterface
 {
-    protected ParticipantProviderInterface $participantProvider;
-    protected ReadableManagerInterface $readableManager;
-    protected EventDispatcherInterface $dispatcher;
-
-    public function __construct(ParticipantProviderInterface $participantProvider, ReadableManagerInterface $readableManager, EventDispatcherInterface $dispatcher)
-    {
-        $this->participantProvider = $participantProvider;
-        $this->readableManager = $readableManager;
-        $this->dispatcher = $dispatcher;
+    public function __construct(
+        protected ParticipantProviderInterface $participantProvider,
+        protected ReadableManagerInterface $readableManager,
+        protected EventDispatcherInterface $dispatcher
+    ) {
     }
 
     /**

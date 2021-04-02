@@ -14,14 +14,14 @@ use FOS\MessageBundle\Model\ParticipantInterface;
 class NewThreadMultipleMessage extends AbstractMessage
 {
     protected Collection $recipients;
-    protected string $subject;
+    protected ?string $subject;
 
     public function __construct()
     {
         $this->recipients = new ArrayCollection();
     }
 
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }

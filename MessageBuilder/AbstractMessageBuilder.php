@@ -15,16 +15,12 @@ use FOS\MessageBundle\Model\ThreadInterface;
  */
 abstract class AbstractMessageBuilder
 {
-    protected MessageInterface $message;
-    protected ThreadInterface $thread;
-
-    public function __construct(MessageInterface $message, ThreadInterface $thread)
-    {
-        $this->message = $message;
-        $this->thread = $thread;
-
-        $this->message->setThread($thread);
-        $thread->addMessage($message);
+    public function __construct(
+        protected MessageInterface $message,
+        protected ThreadInterface $thread
+    ) {
+        $this->message->setThread($this->thread);
+        $this->thread->addMessage($message);
     }
 
     /**

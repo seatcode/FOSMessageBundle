@@ -9,11 +9,9 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ReadableEvent extends Event
 {
-    private ReadableInterface $readable;
-
-    public function __construct(ReadableInterface $readable)
-    {
-        $this->readable = $readable;
+    public function __construct(
+        private ReadableInterface $readable
+    ) {
     }
 
     public function getReadable(): ReadableInterface

@@ -13,12 +13,12 @@ use DateTimeInterface;
  */
 interface MessageInterface extends ReadableInterface
 {
-    public function getId(): int;
-    public function getThread(): ThreadInterface;
+    public function getId(): ?int;
+    public function getThread(): ?ThreadInterface;
     public function setThread(ThreadInterface $thread): void;
-    public function getCreatedAt(): DateTimeInterface;
-    public function getBody(): string;
+    public function getCreatedAt(): ?DateTimeInterface;
+    public function getBody(): ?string;
     public function setBody(string $body): void;
-    public function getSender(): ParticipantInterface;
+    public function getSender(): ?ParticipantInterface;
     public function setSender(ParticipantInterface $sender): void;
 }

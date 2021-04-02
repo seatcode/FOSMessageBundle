@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  *
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  */
-final class Deleter implements DeleterInterface
+class Deleter implements DeleterInterface
 {
     public function __construct(
         private AuthorizerInterface $authorizer,

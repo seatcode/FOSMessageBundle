@@ -20,14 +20,12 @@ use FOS\MessageBundle\ModelManager\MessageManager as BaseMessageManager;
  */
 class MessageManager extends BaseMessageManager
 {
-    protected EntityManagerInterface $em;
     protected ObjectRepository $repository;
     protected string $class;
     protected string $metaClass;
 
-    public function __construct(EntityManagerInterface $em, string $class, string $metaClass)
+    public function __construct(protected EntityManagerInterface $em, string $class, string $metaClass)
     {
-        $this->em = $em;
         $this->repository = $em->getRepository($class);
         $this->class = $em->getClassMetadata($class)->name;
         $this->metaClass = $em->getClassMetadata($metaClass)->name;

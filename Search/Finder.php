@@ -16,13 +16,10 @@ use FOS\MessageBundle\Security\ParticipantProviderInterface;
  */
 class Finder implements FinderInterface
 {
-    protected ParticipantProviderInterface $participantProvider;
-    protected ThreadManagerInterface $threadManager;
-
-    public function __construct(ParticipantProviderInterface $participantProvider, ThreadManagerInterface $threadManager)
-    {
-        $this->participantProvider = $participantProvider;
-        $this->threadManager = $threadManager;
+    public function __construct(
+        protected ParticipantProviderInterface $participantProvider,
+        protected ThreadManagerInterface $threadManager
+    ) {
     }
 
     public function find(Query $query): array

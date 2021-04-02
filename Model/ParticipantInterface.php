@@ -16,5 +16,5 @@ interface ParticipantInterface
     /**
      * Gets the unique identifier of the participant.
      */
-    public function getId(): int;
+    public function getId(): ?int;
 }

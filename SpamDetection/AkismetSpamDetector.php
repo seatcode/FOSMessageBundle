@@ -10,13 +10,10 @@ use Ornicar\AkismetBundle\Akismet\AkismetInterface;
 
 class AkismetSpamDetector implements SpamDetectorInterface
 {
-    protected AkismetInterface $akismet;
-    protected ParticipantProviderInterface $participantProvider;
-
-    public function __construct(AkismetInterface $akismet, ParticipantProviderInterface $participantProvider)
-    {
-        $this->akismet = $akismet;
-        $this->participantProvider = $participantProvider;
+    public function __construct(
+        protected AkismetInterface $akismet,
+        protected ParticipantProviderInterface $participantProvider
+    ) {
     }
 
     /**

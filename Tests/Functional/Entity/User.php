@@ -32,7 +32,7 @@ class User implements ParticipantInterface, UserInterface
     {
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return 1;
     }
