@@ -10,11 +10,9 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class SelfRecipientValidator extends ConstraintValidator
 {
-    protected ParticipantProviderInterface $participantProvider;
-
-    public function __construct(ParticipantProviderInterface $participantProvider)
-    {
-        $this->participantProvider = $participantProvider;
+    public function __construct(
+        protected ParticipantProviderInterface $participantProvider
+    ) {
     }
 
     /**

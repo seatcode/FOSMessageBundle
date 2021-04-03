@@ -10,11 +10,9 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class SpamValidator extends ConstraintValidator
 {
-    protected SpamDetectorInterface $spamDetector;
-
-    public function __construct(SpamDetectorInterface $spamDetector)
-    {
-        $this->spamDetector = $spamDetector;
+    public function __construct(
+        protected SpamDetectorInterface $spamDetector
+    ) {
     }
 
     /**
