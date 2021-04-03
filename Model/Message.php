@@ -33,7 +33,7 @@ abstract class Message implements MessageInterface
         return $this->id;
     }
 
-    public function getThread(): ThreadInterface
+    public function getThread(): ?ThreadInterface
     {
         return $this->thread;
     }
@@ -43,12 +43,12 @@ abstract class Message implements MessageInterface
         $this->thread = $thread;
     }
 
-    public function getCreatedAt(): DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function getBody(): string
+    public function getBody(): ?string
     {
         return $this->body;
     }
@@ -58,7 +58,7 @@ abstract class Message implements MessageInterface
         $this->body = $body;
     }
 
-    public function getSender(): ParticipantInterface
+    public function getSender(): ?ParticipantInterface
     {
         return $this->sender;
     }
@@ -68,7 +68,7 @@ abstract class Message implements MessageInterface
         $this->sender = $sender;
     }
 
-    public function getTimestamp(): int
+    public function getTimestamp(): ?int
     {
         return $this->getCreatedAt()->getTimestamp();
     }
