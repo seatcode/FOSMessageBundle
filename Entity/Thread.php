@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace FOS\MessageBundle\Entity;
 
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use FOS\MessageBundle\Model\MessageInterface;
 use FOS\MessageBundle\Model\ParticipantInterface;
 use FOS\MessageBundle\Model\Thread as BaseThread;
 use FOS\MessageBundle\Model\ThreadMetadata as ModelThreadMetadata;
@@ -17,41 +15,10 @@ use Traversable;
 abstract class Thread extends BaseThread
 {
     /**
-     * Messages contained in this thread.
-     *
-     * @var Collection|MessageInterface[]
-     */
-    protected Collection | array $messages;
-
-    /**
-     * Users participating in this conversation.
-     *
-     * @var Collection|ParticipantInterface[]
-     */
-    protected Collection | array $participants;
-
-    /**
-     * Thread metadata.
-     *
-     * @var Collection|ModelThreadMetadata[]
-     */
-    protected Collection | array $metadata;
-
-    /**
      * All text contained in the thread messages
      * Used for the full text search.
      */
     protected string $keywords = '';
-
-    /**
-     * Participant that created the thread.
-     */
-    protected ?ParticipantInterface $createdBy = null;
-
-    /**
-     * Date this thread was created at.
-     */
-    protected ?DateTimeInterface $createdAt = null;
 
     public function getParticipants(): Collection | array
     {
