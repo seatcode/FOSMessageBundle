@@ -20,6 +20,7 @@ abstract class Message implements MessageInterface
     protected ?string $body = null;
     protected ?DateTimeInterface $createdAt = null;
     protected ?ThreadInterface $thread = null;
+    /** @var Collection<MessageMetadata> | MessageMetadata[] */
     protected Collection | array $metadata;
 
     public function __construct()
@@ -81,7 +82,7 @@ abstract class Message implements MessageInterface
     public function getMetadataForParticipant(ParticipantInterface $participant): ?MessageMetadata
     {
         foreach ($this->metadata as $meta) {
-            if ($meta->getParticipant()->getId() === $participant->getId()) {
+            if ($meta->getParticipant()?->getId() === $participant->getId()) {
                 return $meta;
             }
         }

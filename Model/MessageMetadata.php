@@ -11,7 +11,7 @@ abstract class MessageMetadata
 
     public function getParticipant(): ?ParticipantInterface
     {
-        return $this->participant;
+        return $this->participant ?? null;
     }
 
     public function setParticipant(ParticipantInterface $participant): void
