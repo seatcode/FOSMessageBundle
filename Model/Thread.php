@@ -19,9 +19,9 @@ abstract class Thread implements ThreadInterface
     protected ?int $id = null;
     protected ?string $subject = null;
     protected bool $isSpam = false;
-    protected Collection | array $messages;
-    protected Collection | array $metadata;
-    protected Collection | array $participants;
+    protected Collection | array | null $messages = null;
+    protected Collection | array | null $metadata = null;
+    protected Collection | array | null $participants = null;
     protected ?DateTimeInterface $createdAt = null;
     protected ?ParticipantInterface $createdBy = null;
 
@@ -84,7 +84,7 @@ abstract class Thread implements ThreadInterface
 
     public function getMessages(): Collection | array
     {
-        return $this->messages;
+        return $this->messages ?? [];
     }
 
     public function getFirstMessage(): ?MessageInterface
@@ -154,7 +154,7 @@ abstract class Thread implements ThreadInterface
 
     public function getMetadataForParticipant(ParticipantInterface $participant): ?ThreadMetadata
     {
-        foreach ($this->metadata as $meta) {
+        foreach ($this->metadata ?? [] as $meta) {
             if ($meta->getParticipant()->getId() === $participant->getId()) {
                 return $meta;
             }
